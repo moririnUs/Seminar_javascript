@@ -32,6 +32,12 @@
         canv_effect:null
     };
 
+    function render(ctx,state,point){
+        if(state < 0){      //初期状態の設定
+            canvas_cache.canv_board = drawBoard(state);
+        }
+    }
+
     function drawBoard(state){          //盤の描画
         if(!canvas_cache.canv_board){   //盤をキャッシュする
             canvas_cache.canv_board = document.createElement("canvas");
@@ -41,7 +47,7 @@
 
         let ctx = canvas_cache.canv_board.getContext("2d");
 
-        for(let x = 0;x < cell_num;x++){
+        for(let x = 0;x < cell_num;x++){    //描画処理
             for(let y = 0;y < cell_num;y++){
                 ctx.strokeStyle = COLOR_LINE;
                 ctx.beginPath();
@@ -53,4 +59,4 @@
         return canvas_cache.canv_board;
     }
 
-})
+})((this || 0).self || global);
