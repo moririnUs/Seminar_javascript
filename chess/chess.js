@@ -40,24 +40,27 @@
   }
 
   let init_state = {
-      map:[0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0,0,
-      ],           //初期は空白
+      map: new Array(10).fill(new Array(10).fill(0)), //初期は空白 10*10マス
       turn:1,      //ターン。1が先手,-1が後手
       revision:0,  //この数値の変化で画面の描画をし直す
       selected:{
         name:"",
         value:0
       }
+  }
 
+  function setEvents(){
+
+  }
+
+  function initGame(_ctx){
+    ctx = _ctx;
+    state = objCopy(init_state);
+    if(!evented){     //イベントを登録していないとき
+      evented = true;
+                      //イベント呼び出し
+    }
+    Render.render(ctx,state,point);
   }
 
 
