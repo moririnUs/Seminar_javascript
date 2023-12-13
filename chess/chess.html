@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <canvas id = "canv" width="500px" height="500px"></canvas>
+        <script src = "./render.js" ></script>
+        <script>
+            let ctx = document.getElementById("canv").getContext("2d");
+        </script>
+        <style>
+            #canv{
+                height:500px;
+                width:500px;
+                float:left;
+            }
+        </style>
+        <button onclick="Render.drawBoard(0)"></button>
+    </body>
+</html>

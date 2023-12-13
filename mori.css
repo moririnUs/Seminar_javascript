@@ -1,0 +1,11 @@
+.tatubo-{
+    cursor: pointer;
+    width: 80px;
+}
+.tatubo-:hover{
+    width: 100px;
+}
+
+.discription{
+    text-align: center;
+}

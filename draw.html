@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Canvas Animation</title>
+</head>
+<body>
+    <button onclick="moveShape()">Move Shape</button>
+    <canvas id="myCanvas" width="200" height="200" style="border:1px solid #000000;"></canvas>
+    <script>
+        var canvas = document.getElementById('myCanvas');
+        var ctx = canvas.getContext('2d');
+        var xPos = 25; // 四角形のx座標
+
+        function drawShape(x) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(x, 25, 100, 100);
+        }
+
+        function moveShape() {
+            if (xPos < canvas.width - 100) {
+                xPos += 10; // 移動量を指定
+            } else {
+                xPos = 25; // 画面端まで移動したらリセット
+            }
+            drawShape(xPos);
+        }
+
+        drawShape(xPos); // 初回描画
+    </script>
+</body>
+</html>
