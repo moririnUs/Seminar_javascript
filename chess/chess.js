@@ -58,10 +58,18 @@
     state = objCopy(init_state);
     if(!evented){     //イベントを登録していないとき
       evented = true;
-                      //イベント呼び出し
+      setEvents();    //イベント呼び出し
     }
     Render.render(ctx,state,point);
   }
 
+  function ev_mouseClick(e){
+    let selected = hitTest(point.x,point.y);
+    let number = selected.value;
+  }
+
+  function hitTest(x,y){
+    
+  }
 
 })
