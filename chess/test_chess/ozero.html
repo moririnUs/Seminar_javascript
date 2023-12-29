@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <HTML>
+
 <HEAD>
     <meta content="text/html" charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,8 +12,24 @@
     <script src="./ai.js"></script>
     <script src="./game.js"></script>
     <script>
-        var ctx = document.getElementById("canv").getContext('2d');
-        Game.initGame(ctx);
+        (async function () {
+            let ctx = document.getElementById("canv").getContext('2d');
+            let pawn_img = {                    //駒の画像パスを格納した配列
+                "Pawn": "../assets/pawn.png",
+                "c_King": "../assets/c_king.png",
+                "Bishop": "../assets/bishop.png"
+            }
+
+            let images = {};
+            for (let imgName in pawn_img) {
+                let image = new Image();
+                let promise = new Promise(resolve => image.addEventListener("load", resolve));
+                image.src = pawn_img[imgName];
+                await promise;
+                images[imgName] = image
+                Game.initGame(ctx);
+            }
+        })()
     </script>
     <style>
         #canv {
@@ -21,6 +38,7 @@
             float: left;
         }
     </style>
+    <button onclick=""></button>
 </BODY>
 
 </HTML>

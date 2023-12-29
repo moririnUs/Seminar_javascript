@@ -1,7 +1,7 @@
-(function (global) {
+(async function (global) {
     "use strict";
     // Class ------------------------------------------------
-    function Render() {}
+    function Render() { }
 
     // Header -----------------------------------------------
     global.Render = Render;
@@ -10,6 +10,8 @@
     global.Render.CELL_SIZE = CELL_SIZE;
 
     //-------------------------------------
+    
+
     var COL = 8;
     var RECT_CANV = {
         x: 0,
@@ -97,7 +99,6 @@
         ctx_board2.fill();
         ctx.drawImage(canv_board2, 0, 0, RECT_CANV.w, RECT_CANV.h);
 
-
         return canv_cache.canv_board;
     }
 
@@ -180,6 +181,8 @@
     function objCopy(obj) {
         return JSON.parse(JSON.stringify(obj));
     }
+
+
 
 
 })((this || 0).self || global);
