@@ -8,29 +8,11 @@
 
 <BODY>
     <canvas id="canv" width="500px" height="500px"></canvas>
-    <script src="./render.js"></script>
-    <script src="./ai.js"></script>
-    <script src="./game.js"></script>
-    <script>
-        (async function () {
-            let ctx = document.getElementById("canv").getContext('2d');
-            let pawn_img = {                    //駒の画像パスを格納した配列
-                "Pawn": "../assets/pawn.png",
-                "c_King": "../assets/c_king.png",
-                "Bishop": "../assets/bishop.png"
-            }
-
-            let images = {};
-            for (let imgName in pawn_img) {
-                let image = new Image();
-                let promise = new Promise(resolve => image.addEventListener("load", resolve));
-                image.src = pawn_img[imgName];
-                await promise;
-                images[imgName] = image
-                Game.initGame(ctx);
-            }
-        })()
-    </script>
+    <script src="./Renderer.js"></script>
+    <script src="./AI.js"></script>
+    <script src="./Game.js"></script>
+    <script src="./ImageManager.js"></script>
+    <script src="./Main.js"></script>
     <style>
         #canv {
             height: 500px;
@@ -38,7 +20,6 @@
             float: left;
         }
     </style>
-    <button onclick=""></button>
 </BODY>
 
 </HTML>

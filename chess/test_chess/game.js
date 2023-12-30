@@ -1,23 +1,9 @@
-(function (global) {
-    "use strict";
-    // Class ------------------------------------------------
-    function Game() {}
+class Game {
 
-    // Header -----------------------------------------------
-    global.Game = Game;
-    global.Game.initGame = initGame;
-
-    // ------------------------------------------------------
-    var COL = 8;
-    var ctx;
-    var evented = false;
-    var state = {}
-    var point = {
-        x: 0,
-        y: 0
-    }
-    var init_state = {
-        map: new Array(10).fill(0).map(()=>new Array(10).fill(0)),
+    COL = 8;
+    ctx;
+    state = {
+        map: this.arrangeMap(),
         mode: 0,
         turn: 1,
         revision: 0,
@@ -26,51 +12,53 @@
             value: 0
         }
     };
-    
-    function initGame(_ctx) {
-        ctx = _ctx;
-        state = objCopy(init_state);
-        if (!evented) {
-            evented = true;
-            setEvents();
-        }
-        Render.render(ctx, state, point);
+    point = {
+        x: 0,
+        y: 0
+    };
+    renderer;
+
+    initGame(ctx) {
+        this.ctx = ctx;
+        this.setEvents();
+        this.renderer = new Renderer();
+        this.renderer.render(this.ctx, this.state, this.point);
     }
 
-    function setEvents() {
-        var isTouch;
+    setEvents() {
+        let isTouch;
         if ('ontouchstart' in window) {
             isTouch = true;
         } else {
             isTouch = false;
         }
         if (isTouch) {
-            ctx.canvas.addEventListener('touchstart', ev_mouseClick)
+            this.ctx.canvas.addEventListener('touchstart', this.ev_mouseClick.bind(this));
         } else {
-            ctx.canvas.addEventListener('mousemove', ev_mouseMove)
-            ctx.canvas.addEventListener('mouseup', ev_mouseClick)
+            this.ctx.canvas.addEventListener('mousemove', this.ev_mouseMove.bind(this));
+            this.ctx.canvas.addEventListener('mouseup', this.ev_mouseClick.bind(this));
         }
     }
 
-    function ev_mouseMove(e) {
-        getMousePosition(e);
-        state.selected = hitTest(point.x, point.y);
-        Render.render(ctx, state, point);
+    ev_mouseMove(e) {
+        this.getMousePosition(e);
+        this.state.selected = this.hitTest(this.point.x, this.point.y);
+        this.renderer.render(this.ctx, this.state, this.point);
     }
 
-    function ev_mouseClick(e) {
-        var selected = hitTest(point.x, point.y);
-        var number;
+    ev_mouseClick(e) {
+        let selected = this.hitTest(this.point.x, this.point.y);
+        let number;
         if (selected.name === "RECT_BOARD") {
             number = selected.value;
-            if (Ai.canPut(state.map, selected.value, state.turn) === true) {
+            if (Ai.canPut(this.state.map, selected.value, this.state.turn) === true) {
                 state.map = Ai.putMap(state.map, selected.value, state.turn);
                 state.turn = -1 * state.turn;
                 state.revision += 1;
                 Render.render(ctx, state, point);
 
                 setTimeout(function () {
-                    var _number = Ai.thinkAI(state.map, state.turn, 6)[0];
+                    let _number = Ai.thinkAI(state.map, state.turn, 6)[0];
                     state.map = Ai.putMap(state.map, _number, state.turn);
                     state.turn = -1 * state.turn;
                     state.revision += 1;
@@ -82,7 +70,7 @@
     }
 
 
-    function getMousePosition(e) {
+    getMousePosition(e) {
         if (!e.clientX) { //SmartPhone
             if (e.touches) {
                 e = e.originalEvent.touches[0];
@@ -92,35 +80,44 @@
                 e = event.touches[0];
             }
         }
-        var rect = e.target.getBoundingClientRect();
-        point.x = e.clientX - rect.left;
-        point.y = e.clientY - rect.top;
+        let rect = e.target.getBoundingClientRect();
+        this.point.x = e.clientX - rect.left;
+        this.point.y = e.clientY - rect.top;
     }
 
-    function hitTest(x, y) {
-        var objects = [Render.RECT_BOARD];
-        var click_obj = null;
-        var selected = {
+    hitTest(x, y) {
+        let objects = [this.renderer.RECT_BOARD];
+        let click_obj = null;
+        let selected = {
             name: "",
             value: 0
         }
-        for (var i = 0; i < objects.length; i++) {
+        for (let i = 0; i < objects.length; i++) {
             if (objects[i].w >= x && objects[i].x <= x && objects[i].h >= y && objects[i].y <= y) {
                 selected.name = "RECT_BOARD";
                 break;
             }
         }
         switch (true) {
-        case selected.name === "RECT_BOARD":
-            selected.name = "RECT_BOARD";
-            selected.value = Math.floor(y / Render.CELL_SIZE) * COL + Math.floor(x / Render.CELL_SIZE)
-            break;
+            case selected.name === "RECT_BOARD":
+                selected.name = "RECT_BOARD";
+                selected.value = Math.floor(y / this.renderer.CELL_SIZE) * this.COL + Math.floor(x / this.renderer.CELL_SIZE)
+                break;
         }
         return selected;
     }
 
-    function objCopy(obj) {
-        return JSON.parse(JSON.stringify(obj));
+    arrangeMap() {
+        let map = [];
+        for (let i = 0; i < this.COL; i++) {
+            let row = [];
+            for (let j = 0; j < this.COL; j++) {
+                row.push(0);
+            }
+            map.push(row);
+        }
+        map[3][3] = map[4][4] = -1;
+        map[3][4] = map[4][3] = 1;
+        return map;
     }
-
-})((this || 0).self || global);
+}
