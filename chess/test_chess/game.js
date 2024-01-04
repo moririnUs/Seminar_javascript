@@ -22,7 +22,9 @@ class Game {
         this.ctx = ctx;
         this.setEvents();
         this.renderer = new Renderer();
-        this.renderer.render(this.ctx, this.state, this.point);
+        this.renderer.imgLoadPromise.then(function () {
+            this.renderer.render(this.ctx, this.state, this.point);
+        }.bind(this));
     }
 
     setEvents() {

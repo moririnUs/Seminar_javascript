@@ -29,6 +29,7 @@ class Renderer {
         canv_pieaces: null,
         canv_effect: null
     };
+    imgLoadPromise;
 
     render(ctx, state, point) {
         if (this.prev_revision < 0) {
@@ -170,9 +171,7 @@ class Renderer {
             "c_King": "../assets/c_king.png",
             "Bishop": "../assets/bishop.png"
         };
-        this.imageManager.load().then(function () {
-            game.initGame(ctx);
-        });
+        this.imgLoadPromise = this.imageManager.load();
     }
 
     draw_pawn(){
