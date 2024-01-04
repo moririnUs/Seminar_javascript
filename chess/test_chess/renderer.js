@@ -169,7 +169,16 @@ class Renderer {
         this.imageManager.imgSrcs = {                    //駒の画像パスを格納した配列
             "Pawn": "../assets/pawn.png",
             "c_King": "../assets/c_king.png",
-            "Bishop": "../assets/bishop.png"
+            "Bishop": "../assets/bishop.png",
+            "Rook":"../assets/rook.png",
+            "Queen":"../assets/queen.png",
+            "Knight":"../assets/knight.png",
+            "s_King":"../assets/s_king.png",
+            "Hu":"../assets/Hu.png",
+            "Kyousya":"../assets/kyousya.png",
+            "Keima":"../assets/keima.png",
+            "Gin":"../assets/gin.png",
+            "Kin":"../assets/kin.png"
         };
         this.imgLoadPromise = this.imageManager.load();
     }
