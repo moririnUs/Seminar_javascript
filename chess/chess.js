@@ -14,8 +14,8 @@
     x: 0,
     y: 0
   }
-  let map = new Array(cell_num).fill(0).map(()=>new Array(cell_num).fill(0));
-  let team_map = new Array(cell_num).fill(0).map(()=>new Array(cell_num).fill(0));
+  let map = new Array(cell_num).fill(0).map(() => new Array(cell_num).fill(0));       //0か文字列(駒の種類)が格納されている
+  let team_map = new Array(cell_num).fill(0).map(() => new Array(cell_num).fill(0));  // どの場所にどちらのチームの駒があるかを示している
   let pawns_num = 18;
   let chess_pawns = [ //King:1 Queen:1 Pawn:8 Rook:2 Bishop:2 Knight:2
     "c_King",
@@ -92,8 +92,8 @@
   function random_pawn() {
     let pawns = [];
     /**@param i 現在のpawnsの要素数*/
-    let i = 0;  
-     
+    let i = 0;
+
     let king = Math.random() * 3;
     //配置する18個の駒を決める。
     if (king == 0 || king == 2)//Math.random()の出力結果が0ならばキング、1ならば王将、2は両方
@@ -108,13 +108,13 @@
     let pawn_max = pawns_num - i; //Kingの駒追加分引く
     while (pawn_max != 0) {
       if (Math.random()) {    //0のとき将棋、1のときチェスの駒を選定
-        let c_num = Math.floor(Math.random() * chess_pawns.length -1)+1;//Kingの分配列の長さから引き、最低値を1足す
+        let c_num = Math.floor(Math.random() * chess_pawns.length - 1) + 1;//Kingの分配列の長さから引き、最低値を1足す
         pawns[i] = chess_pawns[c_num];
-        chess_pawns.splice(cnum,1);
+        chess_pawns.splice(cnum, 1);
       } else {
-        let s_num = Math.floor(Math.random() * shogi_pawns.length -1)+1;
+        let s_num = Math.floor(Math.random() * shogi_pawns.length - 1) + 1;
         pawns[i] = shogi_pawns[s_num];
-        shogi_pawns.splice(snum,1);
+        shogi_pawns.splice(snum, 1);
       }
       i++;
       pawns_max--;
@@ -128,31 +128,31 @@
    * @param {Object} pawns2 - 後手の駒を格納した配列
    * @returns {Object} 配置した後のmap(0:無配置,文字列:駒)
    */
-  function random_set(pawns1,pawns2){
-    while(pawns1.length != cellnum*3){  //自陣(3列分)までの要素として配置なしのステータスを挿入
+  function random_set(pawns1, pawns2) {
+    while (pawns1.length != cellnum * 3) {  //自陣(3列分)までの要素として配置なしのステータスを挿入
       pawns1[pawns1.length] = 0;        //配列の長さの値=現在の最後尾の位置
-    }   
-    while(pawns2.length != cellnum*3){  
+    }
+    while (pawns2.length != cellnum * 3) {
       pawns2[pawns2.length] = 0;
     }
 
-    let x=0,y=0;        //map上のx,y座標
+    let x = 0, y = 0;        //map上のx,y座標
     let random_num = 0; //ランダムなindexを格納する
-    for(y = cell_num-3;y<cell_num;y++){                  //配置の決定(先手)
-      for(x = 0;x<cell_num;x++){
+    for (y = cell_num - 3; y < cell_num; y++) {                  //配置の決定(先手)
+      for (x = 0; x < cell_num; x++) {
         random_num = Math.random() * pawns1.length;      //指定する要素の位置
         map[y][x] = pawns1[random_num];
-        make_group(map,1,x,y);
-        pawns1.splice(random_num,1);
+        make_group(map, 1, x, y);
+        pawns1.splice(random_num, 1);
       }
     }
 
-    for(y=0;y<3;y++){
-      for(x=0;x<cell_num;x++){                          //配置の決定(後手)
+    for (y = 0; y < 3; y++) {
+      for (x = 0; x < cell_num; x++) {                          //配置の決定(後手)
         random_num = Math.random() * pawns2.length;
-        map[y][x]= pawns2[random_num];
-        make_group(map,-1,x,y);
-        pawns2.splice(random_num,1);
+        map[y][x] = pawns2[random_num];
+        make_group(map, -1, x, y);
+        pawns2.splice(random_num, 1);
       }
     }
     return map;
@@ -165,8 +165,8 @@
    * @param {Number} y y座標 
    * @param {Number} x x座標
    */
-  function make_group(nmap,team,x,y){                        //駒のチームを判別するレイヤーを編集する
-    if(nmap[y][x] != 0){
+  function make_group(nmap, team, x, y) {                        //駒のチームを判別するレイヤーを編集する
+    if (nmap[y][x] != 0) {
       team_map[y][x] = team;
     }
   }
@@ -180,33 +180,46 @@
    * @param {Number} y y座標
    * @returns {Object} 駒が移動可能な範囲を示した配列 0:移動不可 1:移動可能
    */
-  function move_able(turn,map,pawn,x,y){
-    
-    let i= 0,j=0;
-    let able_map = new Array(cell_num).fill(0).map(()=>new Array(cell_num).fill(0));
-    let tg_pawn = map[y][x];      //渡された駒の位置
+  function move_able(turn, map, pawn, x, y) {
+
+    let Knight = [
+      map[x+2][y+2],
+      map[x+1][y+1]
+    ]
+
+    let i = 0, j = 0;
+    let able_map = new Array(cell_num).fill(0).map(() => new Array(cell_num).fill(0));
     let tg_team = team_map[y][x]; //渡された駒の陣営
-    if(pawn == "c_King"||pawn == "s_King"){
-      for(i=y-1;i<y+1;y++){
-        for(j=x-1;j<x+1;x++){
-          if(i==y&&j==x||map[i][j]!=0){
-          }else{
+    if (pawn == "c_King" || pawn == "s_King") {
+      for (i = y - 1; i < y + 1; y++) {
+        for (j = x - 1; j < x + 1; x++) {
+          if (i == y && j == x || map[i][j] != 0) {   //自身の位置以外3*3マス
+          } else {
             able_map[i][j] == 1;
           }
         }
       }
     }
-    else if(pawn == "Knight"){
+    else if (pawn == "Knight") {
       
     }
-    else if(pawn == "Pawn"){  //メモ:敵味方で上下が反転するが、最終的な走査ののちy成分となるindexを最大値から引くことでこれを実現する
-      if(map[y-1][x] == 0){
-        able_map[i-1][j] = 1;
+    else if (pawn == "Pawn") {  //メモ:敵味方で上下が反転するが、最終的な走査ののちy成分となるindexを最大値から引くことでこれを実現する
+      if (map[y - 1][x] == 0) {
+        able_map[i - 1][j] = 1;
       }
-      if(map[y-1][x+1] != tg_team){
+      if (map[y - 1][x + 1] != tg_team) {
+        able_map[y - 1][x + 1] = 1;
+      }
 
-      }
     }
   }
 
 })
+
+/*
+00000000
+00000000
+11100000
+10100000
+11100000
+*/

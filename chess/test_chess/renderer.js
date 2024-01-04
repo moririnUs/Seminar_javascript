@@ -1,5 +1,5 @@
 class Renderer {
-
+    img;
     COL = 8;
     RECT_CANV = {
         x: 0,
@@ -161,5 +161,20 @@ class Renderer {
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.fillRect(x, y, this.CELL_SIZE, this.CELL_SIZE);
+    }
+
+    constructor() {
+        this.imageManager = new ImageManager();
+        this.imageManager.imgSrcs = {                    //駒の画像パスを格納した配列
+            "Pawn": "../assets/pawn.png",
+            "c_King": "../assets/c_king.png",
+            "Bishop": "../assets/bishop.png"
+        };
+        this.imageManager.load().then(function () {
+            game.initGame(ctx);
+        });
+    }
+
+    draw_pawn(){
     }
 }
