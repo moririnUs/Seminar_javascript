@@ -64,7 +64,7 @@
     3: "Ryuuma",
     4: "Narikei",
     5: "Narikyou",
-    6: "Kin"
+    6: "Narigin"
   }
 
   function setEvents() {

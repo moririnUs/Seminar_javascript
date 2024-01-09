@@ -26,7 +26,8 @@ class Pawn {
         let able_map = new Array(cell_num).fill(0).map(() => new Array(cell_num).fill(0));
 
         switch (pawn) {
-            case "c_King", "s_King":
+            case "c_King":
+            case "s_King":
                 for (i = y - 1; i < y + 1; y++) {
                     for (j = x - 1; j < x + 1; x++) {
                         if (i == y && j == x || team_map[i][j] != turn) {   //自身の位置以外3*3マス
@@ -54,7 +55,8 @@ class Pawn {
                     able_map[y - 1][x - 1] = 1;
                 }
 
-            case "Bishop", "Kaku":
+            case "Bishop":
+            case "Kaku":
                 i = x + 1; j = y + 1;
                 while (i < cell_num && j < cell_num) {    // 右斜め下
                     if (team_map[j][i] == turn) {       //自陣の駒一歩手前で終了
@@ -107,7 +109,8 @@ class Pawn {
                     i--; j--;
                 }
 
-            case "Rook", "Hisya":
+            case "Rook":
+            case "Hisya":
                 for (i = x + 1; i < cell_num; i++) {                   //右
                     if (team_map[y][i] == turn) {
                         break;
@@ -267,42 +270,171 @@ class Pawn {
                 }
 
             case "Gin":
-                if(team_map[y-1][x]!=turn){
-                    able_map[y-1][x] =1;
+                if (team_map[y - 1][x] != turn) {
+                    able_map[y - 1][x] = 1;
                 }
-                if(team_map[y-1][x-1]!=turn){
-                    able_map[y-1][x-1] = 1;
+                if (team_map[y - 1][x - 1] != turn) {
+                    able_map[y - 1][x - 1] = 1;
                 }
-                if(team_map[y-1][x+1]!=turn){
-                    able_map[y-1][x+1] = 1;
+                if (team_map[y - 1][x + 1] != turn) {
+                    able_map[y - 1][x + 1] = 1;
                 }
-                if(team_map[y+1][x-1]!=turn){
-                    able_map[y+1][x-1] = 1;
+                if (team_map[y + 1][x - 1] != turn) {
+                    able_map[y + 1][x - 1] = 1;
                 }
-                if(team_map[y+1][x+1]!=turn){
-                    able_map[y+1][x+1] = 1;
-                }
-            
-            case "Kin","To":
-                if(team_map[y-1][x-1]!=turn){
-                    able_map[y-1][x-1] = 1;
-                }
-                if(team_map[y-1][x]!=turn){
-                    able_map[y-1][x] = 1;
-                }
-                if(team_map[y-1][x+1]!=turn){
-                    able_map[y-1][x+1] = 1;
-                }
-                if(team_map[y][x-1]!=turn){
-                    able_map[y][x-1] = 1;
-                }
-                if(team_map[y][x+1]!=turn){
-                    able_map[y][x+1] = 1;
-                }
-                if(team_map[y+1][x]!=turn){
-                    able_map[y+1][x] = 1;
+                if (team_map[y + 1][x + 1] != turn) {
+                    able_map[y + 1][x + 1] = 1;
                 }
 
+            case "Kin":
+            case "To":
+            case "Narigin":
+            case "Narikei":
+            case "Narikyou":
+                if (team_map[y - 1][x - 1] != turn) {
+                    able_map[y - 1][x - 1] = 1;
+                }
+                if (team_map[y - 1][x] != turn) {
+                    able_map[y - 1][x] = 1;
+                }
+                if (team_map[y - 1][x + 1] != turn) {
+                    able_map[y - 1][x + 1] = 1;
+                }
+                if (team_map[y][x - 1] != turn) {
+                    able_map[y][x - 1] = 1;
+                }
+                if (team_map[y][x + 1] != turn) {
+                    able_map[y][x + 1] = 1;
+                }
+                if (team_map[y + 1][x] != turn) {
+                    able_map[y + 1][x] = 1;
+                }
+
+            case "Ryuuou":
+                for (i = x + 1; i < cell_num; i++) {                   //右
+                    if (team_map[y][i] == turn) {
+                        break;
+                    } else {
+                        able_map[y][i] = 1;
+                        if (team_map[y][i] != turn) {
+                            break;
+                        }
+                    }
+                }
+
+                for (i = x - 1; i >= 0; i--) {                          //左
+                    if (team_map[y][i] == turn) {
+                        break;
+                    } else {
+                        able_map[y][i] = 1;
+                        if (team_map[y][i] != turn) {
+                            break;
+                        }
+                    }
+                }
+
+                for (j = y + 1; y < cell_num; y++) {                    //下
+                    if (team_map[j][x] == turn) {
+                        break;
+                    } else {
+                        able_map[j][x] = 1;
+                        if (team_map[j][x] != turn) {
+                            break;
+                        }
+                    }
+                }
+
+                for (j = y - 1; y >= 0; y--) {                          //上
+                    if (team_map[j][x] == turn) {
+                        break;
+                    } else {
+                        able_map[j][x] = 1;
+                        if (team_map[j][x] != turn) {
+                            break;
+                        }
+                    }
+                }
+
+                if (team_map[y - 1][x - 1] != turn) {
+                    able_map[y - 1][x - 1] = 1;
+                }
+                if (team_map[y - 1][x + 1] != turn) {
+                    able_map[y - 1][x + 1] = 1;
+                }
+                if (team_map[y + 1][x + 1] != turn) {
+                    able_map[y + 1][x + 1] = 1;
+                }
+                if (team_map[y + 1][x - 1] != turn) {
+                    able_map[y + 1][x - 1] = 1;
+                }
+
+            case "Ryuuma":
+                i = x + 1; j = y + 1;
+                while (i < cell_num && j < cell_num) {    // 右斜め下
+                    if (team_map[j][i] == turn) {       //自陣の駒一歩手前で終了
+                        break;
+                    } else {
+                        able_map[j][i] = 1;
+                        if (team_map[j][i] != turn) {     //敵の駒の位置で終了
+                            break;
+                        }
+                    }
+                    i++; j++;
+                }
+
+                i = x - 1; j = y + 1;
+                while (i >= 0 && j < cell_num) {          //左斜め下
+                    if (team_map[j][i] == turn) {
+                        break;
+                    } else {
+                        able_map[j][i] = 1;
+                        if (team_map[j][i] != turn) {
+                            break;
+                        }
+                    }
+                    i--; j++;
+                }
+
+                i = x - 1; j = y - 1;
+                while (i >= 0 && j >= 0) {                  //左斜め上
+                    if (team_map[j][i] == turn) {
+                        break;
+                    } else {
+                        able_map[j][i] = 1;
+                        if (team_map[j][i] != turn) {
+                            break;
+                        }
+                    }
+                    i--; j--;
+                }
+
+                i = x + 1; j = y - 1;
+                while (i < cell_num && j >= 0) {                  //右斜め上
+                    if (team_map[j][i] == turn) {
+                        break;
+                    } else {
+                        able_map[j][i] = 1;
+                        if (team_map[j][i] != turn) {
+                            break;
+                        }
+                    }
+                    i--; j--;
+                }
+
+                if(team_map[y-1][x] != turn){
+                    able_map[y-1][x] =1;
+                }
+                if(team_map[y+1][x] != turn){
+                    able_map[y+1][x] =1;
+                }
+                if(team_map[y][x-1] != turn){
+                    able_map[y][x-1] =1;
+                }
+                if(team_map[y][x+1] != turn){
+                    able_map[y][x+1] =1;
+                }
+
+            default:
         }
     }
 }
