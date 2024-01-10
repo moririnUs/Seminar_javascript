@@ -99,7 +99,7 @@
       let x = event.pageX ;
       let y = event.pageY ;
       if(map[y][x] != 0 && team_map[y][x] == init_state.turn){
-        let able_map = new Pawn.move_able(init_state.turn,map,);
+        let able_map = new Pawn.move_able(init_state.turn,map,x,y);
         Renderer.draw_able(able_map);
       }
     });
