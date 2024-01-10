@@ -28,3 +28,11 @@ function draw() {
 
 // angry変数を定義
 const angry = new Audio('./asset/audio/choo_heart.wav');
+
+document.addEventListener( "click", function( event ) {
+	let x = event.pageX ;
+	let y = event.pageY ;
+
+  console.log(x,y);
+}) ;
+

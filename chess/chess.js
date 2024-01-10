@@ -67,6 +67,19 @@
     6: "Narigin"
   }
 
+  var init_state = {//ゲーム開始時の盤面の状態
+    _map: map,
+    //ターン。1は先手、-1は後手。
+    turn: 1,
+    //これが増えてたら画面を描画し直す。
+    revision: 0,
+    //どのマスが選択されているかの情報
+    selected: {
+        name: "",
+        value: 0
+    }
+  };
+
   function setEvents() {
 
   }
@@ -82,8 +95,16 @@
   }
 
   function ev_mouseClick(e) {
-    let selected = hitTest(point.x, point.y);
-    let number = selected.value;
+    document.body.addEventListener( "click", function( event ) {
+      let x = event.pageX ;
+      let y = event.pageY ;
+      if(map[y][x] != 0 && team_map[y][x] == init_state.turn){
+        let able_map = new Pawn.move_able(init_state.turn,map,);
+        Renderer.draw_able(able_map);
+      }
+    });
+
+
   }
   /**
    * ランダムに駒を配置する関数です。
@@ -171,35 +192,35 @@
     }
   }
 
-    /**
-           * ターン終了時の判定を格納している
-           * 現在実装している機能:勝敗判定
-           * @returns winner 勝者のチーム番号 続行の場合は0
-           */
-    function judge_turn() {
-      let king_num = 0;
-      let cnt = false;
-      let winner = 0;
-      for (let i = 0; i < cell_num; i++) {
-        for (let j = 0; j < cell_num; j++) {
-          if (map[i][j].includes("King")) {
-            if (king_num != 0) {
-              king_num = team_map[i][j];
-            } else {
-              if (king_num != team_map[i][j]) {
-                cnt = true;
-                break;
-              }
+  /**
+         * ターン終了時の判定を格納している
+         * 現在実装している機能:勝敗判定
+         * @returns winner 勝者のチーム番号 続行の場合は0
+         */
+  function judge_turn() {
+    let king_num = 0;
+    let cnt = false;
+    let winner = 0;
+    for (let i = 0; i < cell_num; i++) {
+      for (let j = 0; j < cell_num; j++) {
+        if (map[i][j].includes("King")) {
+          if (king_num != 0) {
+            king_num = team_map[i][j];
+          } else {
+            if (king_num != team_map[i][j]) {
+              cnt = true;
+              break;
             }
           }
         }
       }
-      if (!cnt) {
-        winner = king_num;
-      }
-      return winner;
     }
-
+    if (!cnt) {
+      winner = king_num;
+    }
+    return winner;
   }
+
+}
 
 )

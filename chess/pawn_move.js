@@ -21,7 +21,7 @@ class Pawn {
             [y + 1][x - 2],
             [y + 2][x - 1]
         ]
-
+        let cell_num = 9;
         let i = 0, j = 0;
         let able_map = new Array(cell_num).fill(0).map(() => new Array(cell_num).fill(0));
 
@@ -433,8 +433,7 @@ class Pawn {
                 if(team_map[y][x+1] != turn){
                     able_map[y][x+1] =1;
                 }
-
-            default:
         }
+        return able_map;
     }
 }

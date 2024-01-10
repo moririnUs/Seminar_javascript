@@ -1,6 +1,6 @@
 class Renderer {
     img;
-    COL = 8;
+    COL = 9;
     RECT_CANV = {
         x: 0,
         y: 0,
@@ -164,25 +164,42 @@ class Renderer {
         ctx.fillRect(x, y, this.CELL_SIZE, this.CELL_SIZE);
     }
 
+    /**
+     * 駒の移動可能な範囲を描画する。
+     * @param {Object} able_map 駒の移動可能範囲 
+     */
+    draw_able(able_map) {
+        let canv = document.createElement("canvas");
+        let ctx = canv.getContext('2d');
+
+        for (let i = 0; i < COL; i++) {
+            for (let j = 0; j < COL; j++) {
+                if (able_map[i][j]) {
+                    ctx.arc(j * this.CELL_SIZE + this.CELL_SIZE / 2, i * this.CELL_SIZE + this.CELL_SIZE / 2,0,2*Math.PI);  //移動可能範囲には円を描画
+                }
+            }
+        }
+    }
+
     constructor() {
         this.imageManager = new ImageManager();
         this.imageManager.imgSrcs = {                    //駒の画像パスを格納した配列
             "Pawn": "../assets/pawn.png",
             "c_King": "../assets/c_king.png",
             "Bishop": "../assets/bishop.png",
-            "Rook":"../assets/rook.png",
-            "Queen":"../assets/queen.png",
-            "Knight":"../assets/knight.png",
-            "s_King":"../assets/s_king.png",
-            "Hu":"../assets/Hu.png",
-            "Kyousya":"../assets/kyousya.png",
-            "Keima":"../assets/keima.png",
-            "Gin":"../assets/gin.png",
-            "Kin":"../assets/kin.png"
+            "Rook": "../assets/rook.png",
+            "Queen": "../assets/queen.png",
+            "Knight": "../assets/knight.png",
+            "s_King": "../assets/s_king.png",
+            "Hu": "../assets/Hu.png",
+            "Kyousya": "../assets/kyousya.png",
+            "Keima": "../assets/keima.png",
+            "Gin": "../assets/gin.png",
+            "Kin": "../assets/kin.png"
         };
         this.imgLoadPromise = this.imageManager.load();
     }
 
-    draw_pawn(){
+    draw_pawn() {
     }
 }
