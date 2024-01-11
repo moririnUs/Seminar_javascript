@@ -7,6 +7,8 @@ class Pawn {
    * @param {Number} y y座標
    * @returns {Object} 駒が移動可能な範囲を示した配列 0:移動不可 1:移動可能
    */
+
+    //turnが-1のときは porn,keima,kyousya,hu,kinの判定を反転
     move_able(turn, map, x, y) {
 
         let pawn = map[y][x];
@@ -24,6 +26,11 @@ class Pawn {
         let cell_num = 9;
         let i = 0, j = 0;
         let able_map = new Array(cell_num).fill(0).map(() => new Array(cell_num).fill(0));
+
+        let rev_y = 1;      //チームによってyの変化量を反転する
+        if (turn != 1) {
+            rev_y *= -1;
+        }
 
         switch (pawn) {
             case "c_King":
@@ -44,15 +51,17 @@ class Pawn {
                     }
                 }
 
-            case "Pawn":                      //メモ:敵味方で上下が反転するが、最終的な走査ののちy成分となるindexを最大値から引くことでこれを実現する
-                if (team_map[y - 1][x] == 0) {
-                    able_map[i - 1][j] = 1;
-                }
-                if (team_map[y - 1][x + 1] == -turn) {
-                    able_map[y - 1][x + 1] = 1;
-                }
-                if (team_map[y - 1][x - 1] == -turn) {
-                    able_map[y - 1][x - 1] = 1;
+            case "Pawn":
+                if (turn == 1) {
+                    if (team_map[y - rev_y][x] == 0) {
+                        able_map[y - rev_y][x] = 1;
+                    }
+                    if (team_map[y - rev_y][x + 1] == -turn) {
+                        able_map[y - rev_y][x + 1] = 1;
+                    }
+                    if (team_map[y - rev_y][x - 1] == -turn) {
+                        able_map[y - rev_y][x - 1] = 1;
+                    }
                 }
 
             case "Bishop":
@@ -153,23 +162,38 @@ class Pawn {
                 }
 
             case "Kyousya":
-                for (j = y - 1; y >= 0; y--) {
-                    if (team_map[j][x] == turn) {
-                        break;
-                    } else {
-                        able_map[j][x] = 1;
-                        if (team_map[j][x] != turn) {
+                if (turn == 1) {
+                    for (j = y - 1; y >= 0; y--) {
+                        if (team_map[j][x] == turn) {
                             break;
+                        } else {
+                            able_map[j][x] = 1;
+                            if (team_map[j][x] != turn) {
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    for (j = y + 1; y < cell_num; y--) {
+                        if (team_map[j][x] == turn) {
+                            break;
+                        } else {
+                            able_map[j][x] = 1;
+                            if (team_map[j][x] != turn) {
+                                break;
+                            }
                         }
                     }
                 }
 
             case "Keima":
-                if (team_map[y - 2][x + 1] != turn) {
-                    able_map[y - 2][x + 1] = 1;
-                }
-                if (team_map[y - 2][x - 1] != turn) {
-                    able_map[y - 2][x - 1] = 1;
+                if (turn == 1) {
+                    if (team_map[y - (2*rev_y)][x + 1] != turn) {
+                        able_map[y - (2*rev_y)][x + 1] = 1;
+                    }
+                    if (team_map[y - (2*rev_y)][x - 1] != turn) {
+                        able_map[y - (2*rev_y)][x - 1] = 1;
+                    }
                 }
 
             case "Queen":
@@ -270,20 +294,21 @@ class Pawn {
                 }
 
             case "Gin":
-                if (team_map[y - 1][x] != turn) {
-                    able_map[y - 1][x] = 1;
+                
+                if (team_map[y - rev_y][x] != turn) {
+                    able_map[y - rev_y][x] = 1;
                 }
-                if (team_map[y - 1][x - 1] != turn) {
-                    able_map[y - 1][x - 1] = 1;
+                if (team_map[y - rev_y][x - 1] != turn) {
+                    able_map[y - rev_y][x - 1] = 1;
                 }
-                if (team_map[y - 1][x + 1] != turn) {
-                    able_map[y - 1][x + 1] = 1;
+                if (team_map[y - rev_y][x + 1] != turn) {
+                    able_map[y - rev_y][x + 1] = 1;
                 }
-                if (team_map[y + 1][x - 1] != turn) {
-                    able_map[y + 1][x - 1] = 1;
+                if (team_map[y + rev_y][x - 1] != turn) {
+                    able_map[y + rev_y][x - 1] = 1;
                 }
-                if (team_map[y + 1][x + 1] != turn) {
-                    able_map[y + 1][x + 1] = 1;
+                if (team_map[y + rev_y][x + 1] != turn) {
+                    able_map[y + rev_y][x + 1] = 1;
                 }
 
             case "Kin":
@@ -291,14 +316,19 @@ class Pawn {
             case "Narigin":
             case "Narikei":
             case "Narikyou":
-                if (team_map[y - 1][x - 1] != turn) {
-                    able_map[y - 1][x - 1] = 1;
+
+                rev_y = 1;
+                if (turn != 1) {
+                    rev_y *= -1;
                 }
-                if (team_map[y - 1][x] != turn) {
-                    able_map[y - 1][x] = 1;
+                if (team_map[y - rev_y][x - 1] != turn) {
+                    able_map[y - rev_y][x - 1] = 1;
                 }
-                if (team_map[y - 1][x + 1] != turn) {
-                    able_map[y - 1][x + 1] = 1;
+                if (team_map[y - rev_y][x] != turn) {
+                    able_map[y - rev_y][x] = 1;
+                }
+                if (team_map[y - rev_y][x + 1] != turn) {
+                    able_map[y - rev_y][x + 1] = 1;
                 }
                 if (team_map[y][x - 1] != turn) {
                     able_map[y][x - 1] = 1;
@@ -306,8 +336,8 @@ class Pawn {
                 if (team_map[y][x + 1] != turn) {
                     able_map[y][x + 1] = 1;
                 }
-                if (team_map[y + 1][x] != turn) {
-                    able_map[y + 1][x] = 1;
+                if (team_map[y + rev_y][x] != turn) {
+                    able_map[y + rev_y][x] = 1;
                 }
 
             case "Ryuuou":
@@ -421,19 +451,20 @@ class Pawn {
                     i--; j--;
                 }
 
-                if(team_map[y-1][x] != turn){
-                    able_map[y-1][x] =1;
+                if (team_map[y - 1][x] != turn) {
+                    able_map[y - 1][x] = 1;
                 }
-                if(team_map[y+1][x] != turn){
-                    able_map[y+1][x] =1;
+                if (team_map[y + 1][x] != turn) {
+                    able_map[y + 1][x] = 1;
                 }
-                if(team_map[y][x-1] != turn){
-                    able_map[y][x-1] =1;
+                if (team_map[y][x - 1] != turn) {
+                    able_map[y][x - 1] = 1;
                 }
-                if(team_map[y][x+1] != turn){
-                    able_map[y][x+1] =1;
+                if (team_map[y][x + 1] != turn) {
+                    able_map[y][x + 1] = 1;
                 }
         }
+
         return able_map;
     }
 }

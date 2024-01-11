@@ -91,7 +91,7 @@
       evented = true;
       setEvents();    //イベント呼び出し
     }
-    Render.render(ctx, state, point);
+    Renderer.render(ctx, state, point);
   }
 
   function ev_mouseClick(e) {
@@ -195,7 +195,7 @@
   /**
          * ターン終了時の判定を格納している
          * 現在実装している機能:勝敗判定
-         * @returns winner 勝者のチーム番号 続行の場合は0
+         * @returns 勝者のチーム番号 続行の場合は0
          */
   function judge_turn() {
     let king_num = 0;
