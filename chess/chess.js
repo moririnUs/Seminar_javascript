@@ -75,8 +75,8 @@
     revision: 0,
     //どのマスが選択されているかの情報
     selected: {
-        name: "",
-        value: 0
+      name: "",
+      value: 0
     }
   };
 
@@ -91,18 +91,34 @@
       evented = true;
       setEvents();    //イベント呼び出し
     }
+    ev_mouseClick();
+    judge_turn();
     Renderer.render(ctx, state, point);
   }
 
-  function ev_mouseClick(e) {
-    document.body.addEventListener( "click", function( event ) {
-      let x = event.pageX ;
-      let y = event.pageY ;
-      if(map[y][x] != 0 && team_map[y][x] == init_state.turn){
-        let able_map = new Pawn.move_able(init_state.turn,map,x,y);
-        Renderer.draw_able(able_map);
-      }
-    });
+  function ev_mouseClick() {
+    let ct = false;
+    while (ct) {
+      document.body.addEventListener("click", function (event) {           //駒の選択
+        let sel_x = event.pageX;
+        let sel_y = event.pageY;
+        if (map[sel_y][sel_x] != 0 && team_map[sel_y][sel_x] == init_state.turn) {
+          let able_map = new Pawn.move_able(init_state.turn, map, sel_x, sel_y);
+          Renderer.draw_able(able_map);
+
+          document.body.addEventListener("click", function (event) {      //移動箇所の選択
+            let x = event.pageX;
+            let y = event.pageY;
+            if (able_map[y][x] == 1) {              //移動可能な場所を指定した場合
+              map[y][x] = map[sel_y][sel_x]
+              map[sel_y][sel_x] = 0;
+              ct = true;
+            }
+          })
+        }
+      })
+
+    };
 
 
   }
@@ -201,7 +217,7 @@
     let king_num = 0;
     let cnt = false;
     let winner = 0;
-    for (let i = 0; i < cell_num; i++) {
+    for (let i = 0; i < cell_num; i++) {        //最初に読み取ったキングのチームに対し、別チームのキングがいなかった場合試合終了
       for (let j = 0; j < cell_num; j++) {
         if (map[i][j].includes("King")) {
           if (king_num != 0) {
