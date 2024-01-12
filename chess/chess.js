@@ -6,6 +6,8 @@
   global.Game = Game;
   global.Game.initGame = initgame;
 
+  CELL_SIZE = Renderer.CELL_SIZE;
+
   let cell_num = 9;  //マス数
   let ctx;            //キャンバス要素
   let evented = false;//イベントが設定されているか
@@ -59,12 +61,12 @@
     "Kin"
   ]
   let ex_shogi_pawns = {
-    1: "To",
-    2: "Ryuuou",
-    3: "Ryuuma",
-    4: "Narikei",
-    5: "Narikyou",
-    6: "Narigin"
+    "Hu": "To",
+    "Hisya": "Ryuuou",
+    "Kaku": "Ryuuma",
+    "Keima": "Narikei",
+    "Kyousya": "Narikyou",
+    "Gin": "Narigin"
   }
 
   var init_state = {//ゲーム開始時の盤面の状態
@@ -97,11 +99,13 @@
   }
 
   function ev_mouseClick() {
-    let ct = false;
+    let ct = true;
     while (ct) {
       document.body.addEventListener("click", function (event) {           //駒の選択
         let sel_x = event.pageX;
         let sel_y = event.pageY;
+        sel_x /= CELL_SIZE | 0;
+        sel_y /= CELL_SIZE | 0;
         if (map[sel_y][sel_x] != 0 && team_map[sel_y][sel_x] == init_state.turn) {
           let able_map = new Pawn.move_able(init_state.turn, map, sel_x, sel_y);
           Renderer.draw_able(able_map);
@@ -109,19 +113,19 @@
           document.body.addEventListener("click", function (event) {      //移動箇所の選択
             let x = event.pageX;
             let y = event.pageY;
-            if (able_map[y][x] == 1) {              //移動可能な場所を指定した場合
+            x /= CELL_SIZE | 0;
+            y /= CELL_SIZE | 0;
+            if (able_map[y][x] == 1 && x < cell_num && y < cell_num) {              //盤内の移動可能な場所を指定した場合
               map[y][x] = map[sel_y][sel_x]
               map[sel_y][sel_x] = 0;
-              ct = true;
+              ct = false;
             }
           })
         }
       })
-
-    };
-
-
+    }
   }
+
   /**
    * ランダムに駒を配置する関数です。
    * @returns {Object} 駒を格納した配列=>文字列or0
@@ -208,9 +212,16 @@
     }
   }
 
+  function Nari(pawn) {
+    switch (pawn) {
+
+    }
+    return pawn;
+  }
+
   /**
          * ターン終了時の判定を格納している
-         * 現在実装している機能:勝敗判定
+         * 現在実装している機能:勝敗判定　成りの判定
          * @returns 勝者のチーム番号 続行の場合は0
          */
   function judge_turn() {
@@ -231,6 +242,17 @@
         }
       }
     }
+
+    if (init_state.turn == 1) {                         //将棋の駒に対して成りを適用する
+      if (shogi_pawns.includes(map[y][x]) && y < 3) {
+        map[y][x] = ex_shogi_pawns[map[y][x]];
+      }
+    } else {
+      if (shogi_pawns.includes(map[y][x]) && y >= cell_num - 3) {
+        map[y][x] = ex_shogi_pawns[map[y][x]];
+      }
+    };
+
     if (!cnt) {
       winner = king_num;
     }
@@ -238,5 +260,6 @@
   }
 
 }
+
 
 )
