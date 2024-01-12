@@ -258,8 +258,5 @@
     }
     return winner;
   }
-
 }
-
-
 )
