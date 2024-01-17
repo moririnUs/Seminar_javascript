@@ -1,6 +1,6 @@
 class Game {
 
-    COL = 8;
+    COL = 9;
     ctx;
     state = {
         map: this.arrangeMap(),

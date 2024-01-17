@@ -195,7 +195,13 @@ class Renderer {
             "Kyousya": "../assets/kyousya.png",
             "Keima": "../assets/keima.png",
             "Gin": "../assets/gin.png",
-            "Kin": "../assets/kin.png"
+            "Kin": "../assets/kin.png",
+            "To": "../assets/to.png",
+            "Narigin": "../assets/narigin.png",
+            "Narikyou": "../assets/narikyou.png",
+            "Narikei": "../assets/narikei.png",
+            "Ryuuou": "../assets/ryuuou.png",
+            "Ryuuma": "../assets/ryuuma.png",
         };
         this.imgLoadPromise = this.imageManager.load();
     }
