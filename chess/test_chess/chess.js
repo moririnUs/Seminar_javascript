@@ -106,6 +106,7 @@ class Game {
     renderer.imgLoadPromise.then(function () {
       renderer.render(_ctx, state);
     })
+    this.renderer = renderer;
     // ctx = _ctx;
     // state = objCopy(init_state);
     // if (!evented) {     //イベントを登録していないとき
@@ -178,14 +179,14 @@ class Game {
 }
 
 hitTest(x, y) {
-  let objects = [Renderer.RECT_BOARD];
+  let objects = [this.renderer.RECT_BOARD];
   let click_obj = null;
   let selected = {
       name: "",
       value: 0
   }
   for (let i = 0; i < objects.length; i++) {
-    console.log(objects[i]);
+    
 
       if (objects[i].w >= x && objects[i].x <= x && objects[i].h >= y && objects[i].y <= y) {
           selected.name = "RECT_BOARD";
