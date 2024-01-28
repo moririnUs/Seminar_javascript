@@ -2,6 +2,7 @@
 class Game {
 
   CELL_SIZE = Renderer.CELL_SIZE;
+  renderer = new Renderer();
 
   cell_num = 9;  //マス数
   ctx;            //キャンバス要素
@@ -98,13 +99,13 @@ class Game {
     this.ctx = _ctx;
     let state = this.objCopy(this.init_state)
     this.setEvents();
-    let renderer = new Renderer();
+
     console.log(_ctx);
     console.log(state);
     console.log(this.point);
 
     renderer.imgLoadPromise.then(function () {
-      renderer.render(_ctx, state);
+      this.renderer.render(_ctx, state);
     })
     // ctx = _ctx;
     // state = objCopy(init_state);
@@ -195,7 +196,7 @@ hitTest(x, y) {
   switch (true) {
   case selected.name === "RECT_BOARD":
       selected.name = "RECT_BOARD";
-      selected.value = Math.floor(y / Render.CELL_SIZE) * COL + Math.floor(x / Renderer.CELL_SIZE)
+      selected.value = Math.floor(y / this.CELL_SIZE) * Renderer.COL + Math.floor(x / this.CELL_SIZE)
       break;
   }
   return selected;

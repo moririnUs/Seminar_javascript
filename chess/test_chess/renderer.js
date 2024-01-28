@@ -7,7 +7,7 @@ class Renderer {
         w: 500,
         h: 500
     };
-    RECT_BOARD = {
+    static RECT_BOARD = {
         x: 0,
         y: 0,
         w: 500,
