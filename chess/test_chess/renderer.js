@@ -98,7 +98,6 @@ class Renderer {
 
         for (let x = 0; x < this.COL; x++) {
             for (let y = 0; y < this.COL; y++) {
-                console.log(state);
                 if (state.map[y][x] != 0) {
                     this.drawPiece(ctx, x * this.CELL_SIZE, y * this.CELL_SIZE, state.map[y * this.COL + x]);
                 }
