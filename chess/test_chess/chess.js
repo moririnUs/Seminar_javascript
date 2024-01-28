@@ -1,9 +1,8 @@
 
 class Game {
-
-  CELL_SIZE = Renderer.CELL_SIZE;
+  pawn = new Pawn();
   renderer = new Renderer();
-
+  CELL_SIZE = this.renderer.CELL_SIZE;
   cell_num = 9;  //マス数
   ctx;            //キャンバス要素
   evented = false;//イベントが設定されているか
@@ -11,9 +10,10 @@ class Game {
   point = {        //マウスカーソルの座標
     x: 0,
     y: 0
-  }
+  };
   map = Array(this.cell_num).fill(0).map(() => Array(this.cell_num).fill(0));       //0か文字列(駒の種類)が格納されている
   team_map = Array(this.cell_num).fill(0).map(() => Array(this.cell_num).fill(0));  // どの場所にどちらのチームの駒があるかを示している
+  able_map = Array(this.cell_num).fill(0).map(() => Array(this.cell_num).fill(0));
   pawns_num = 18;
   chess_pawns = [ //King:1 Queen:1 Pawn:8 Rook:2 Bishop:2 Knight:2
     "c_King",
@@ -32,7 +32,7 @@ class Game {
     "Bishop",
     "Knight",
     "Knight"
-  ]
+  ];
 
   shogi_pawns = [ //King:1 Hu:9 Hisya:1 Kaku:1 Keima:2 Kyousya:2 Gin:2 Kin:2
     "s_King",
@@ -55,7 +55,7 @@ class Game {
     "Gin",
     "Kin",
     "Kin"
-  ]
+  ];
   ex_shogi_pawns = {
     "Hu": "To",
     "Hisya": "Ryuuou",
@@ -63,10 +63,9 @@ class Game {
     "Keima": "Narikei",
     "Kyousya": "Narikyou",
     "Gin": "Narigin"
-  }
-
+  };
   init_state = {//ゲーム開始時の盤面の状態
-    map:this.map,
+    map: this.map,
     //ターン。1は先手、-1は後手。
     turn: 1,
     //これが増えてたら画面を描画し直す。
@@ -96,17 +95,13 @@ class Game {
 
   //聞きたいこと:initGameでどのような処理を行うべきか,描画の仕方とは
   initGame(_ctx) {
+    this.random_set();
     this.ctx = _ctx;
-    let state = this.objCopy(this.init_state)
+    this.state = this.objCopy(this.init_state)
     this.setEvents();
 
-    console.log(_ctx);
-    console.log(state);
-    console.log(this.point);
-
-
     this.renderer.imgLoadPromise.then(function () {
-      this.renderer.render(_ctx, state);
+      this.renderer.render(_ctx, this.state);
     }.bind(this));
     // ctx = _ctx;
     // state = objCopy(init_state);
@@ -138,26 +133,27 @@ class Game {
   }
 
   async ev_mouseClick(e) {
-    ct = true;
-    this.random_set();
+    let ct = true;
+    let ev;
     while (ct) {
-      event = await new Promise(resolve => document.body.addEventListener("click", resolve, { once: true }));          //駒の選択
-      sel_x = event.pageX;
-      sel_y = event.pageY;
-      sel_x /= CELL_SIZE | 0;
-      sel_y /= CELL_SIZE | 0;
-      if (map[sel_y][sel_x] != 0 && team_map[sel_y][sel_x] == init_state.turn) {
-        able_map = Pawn.move_able(init_state.turn, map, sel_x, sel_y);
-        Renderer.draw_able(able_map);
+      ev = await new Promise(resolve => document.body.addEventListener("click", resolve, { once: true }));          //駒の選択
+      let sel_x = ev.pageX;
+      let sel_y = ev.pageY;
+      sel_x = parseInt(sel_x / this.CELL_SIZE);
+      sel_y = parseInt(sel_y / this.CELL_SIZE);
+      console.log(sel_x)
+      if (this.map[sel_y][sel_x] != 0 && this.team_map[sel_y][sel_x] == this.init_state.turn) {
+        this.able_map = this.pawn.move_able(this.init_state.turn, this.map, sel_x, sel_y);
+        this.renderer.draw_able(this.able_map);
 
-        event = await new Promise(resolve => document.body.addEventListener("click", resolve, { once: true }));      //移動箇所の選択
-        x = event.pageX;
-        y = event.pageY;
-        x /= CELL_SIZE | 0;
-        y /= CELL_SIZE | 0;
-        if (able_map[y][x] == 1 && x < cell_num && y < cell_num) {              //盤内の移動可能な場所を指定した場合
-          map[y][x] = map[sel_y][sel_x]
-          map[sel_y][sel_x] = 0;
+        ev = await new Promise(resolve => document.body.addEventListener("click", resolve, { once: true }));      //移動箇所の選択
+        let x = ev.pageX;
+        let y = ev.pageY;
+        x = parseInt(x / this.CELL_SIZE);
+        y = parseInt(y / this.CELL_SIZE);
+        if (this.able_map[y][x] == 1 && x < this.cell_num && y < this.cell_num) {              //盤内の移動可能な場所を指定した場合
+          this.map[y][x] = this.map[sel_y][sel_x]
+          this.map[sel_y][sel_x] = 0;
           ct = false;
         }
       }
@@ -166,47 +162,47 @@ class Game {
 
   getMousePosition(e) {
     if (!e.clientX) { //SmartPhone
-        if (e.touches) {
-            e = e.originalEvent.touches[0];
-        } else if (e.originalEvent.touches) {
-            e = e.originalEvent.touches[0];
-        } else {
-            e = event.touches[0];
-        }
+      if (e.touches) {
+        e = e.originalEvent.touches[0];
+      } else if (e.originalEvent.touches) {
+        e = e.originalEvent.touches[0];
+      } else {
+        e = event.touches[0];
+      }
     }
     var rect = e.target.getBoundingClientRect();
     this.point.x = e.clientX - rect.left;
     this.point.y = e.clientY - rect.top;
-}
+  }
 
-hitTest(x, y) {
-  let objects = [this.renderer.RECT_BOARD];
-  let click_obj = null;
-  let selected = {
+  hitTest(x, y) {
+    let objects = [this.renderer.RECT_BOARD];
+    let click_obj = null;
+    let selected = {
       name: "",
       value: 0
-  }
+    }
 
-  for (let i = 0; i < objects.length; i++) {
-    
+    for (let i = 0; i < objects.length; i++) {
+
 
       if (objects[i].w >= x && objects[i].x <= x && objects[i].h >= y && objects[i].y <= y) {
-          selected.name = "RECT_BOARD";
-          break;
+        selected.name = "RECT_BOARD";
+        break;
       }
+    }
+    switch (true) {
+      case selected.name === "RECT_BOARD":
+        selected.name = "RECT_BOARD";
+        selected.value = Math.floor(y / this.CELL_SIZE) * Renderer.COL + Math.floor(x / this.CELL_SIZE)
+        break;
+    }
+    return selected;
   }
-  switch (true) {
-  case selected.name === "RECT_BOARD":
-      selected.name = "RECT_BOARD";
-      selected.value = Math.floor(y / this.CELL_SIZE) * Renderer.COL + Math.floor(x / this.CELL_SIZE)
-      break;
-  }
-  return selected;
-}
 
-objCopy(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
+  objCopy(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
   /**
    * ランダムに駒を選択する関数です。
    * @returns {Object} 先手pawn1、後手pawn2の駒を格納した配列=>文字列or0
