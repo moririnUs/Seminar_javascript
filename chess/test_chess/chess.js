@@ -104,10 +104,10 @@ class Game {
     console.log(state);
     console.log(this.point);
 
-    renderer.imgLoadPromise.then(function () {
+
+    this.renderer.imgLoadPromise.then(function () {
       this.renderer.render(_ctx, state);
-    })
-    this.renderer = renderer;
+    }.bind(this));
     // ctx = _ctx;
     // state = objCopy(init_state);
     // if (!evented) {     //イベントを登録していないとき
@@ -186,6 +186,7 @@ hitTest(x, y) {
       name: "",
       value: 0
   }
+
   for (let i = 0; i < objects.length; i++) {
     
 
