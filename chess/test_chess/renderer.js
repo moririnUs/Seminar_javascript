@@ -13,6 +13,7 @@ class Renderer {
         w: 500,
         h: 500
     };
+
     CELL_SIZE = parseInt(this.RECT_CANV.w / this.COL);
     COLOR_LINE = "#000000";
     COLOR_WHITE = "#FFFFFF";
@@ -172,8 +173,8 @@ class Renderer {
         let canv = document.createElement("canvas");
         let ctx = canv.getContext('2d');
 
-        for (let i = 0; i < COL; i++) {
-            for (let j = 0; j < COL; j++) {
+        for (let i = 0; i < this.COL; i++) {
+            for (let j = 0; j < this.COL; j++) {
                 if (able_map[i][j]) {
                     ctx.arc(j * this.CELL_SIZE + this.CELL_SIZE / 2, i * this.CELL_SIZE + this.CELL_SIZE / 2,0,2*Math.PI);  //移動可能範囲には円を描画
                 }

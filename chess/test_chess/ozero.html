@@ -10,7 +10,7 @@
     <canvas id="canv" width="500px" height="500px"></canvas>
     <script src="./Renderer.js"></script>
     <script src="./AI.js"></script>
-    <script src="./Game.js"></script>
+    <script src="./chess.js"></script>
     <script src="./ImageManager.js"></script>
     <script src="./Main.js"></script>
     <style>
@@ -20,6 +20,16 @@
             float: left;
         }
     </style>
+    <select id="change_pawn">
+        <option value = "Queen">クイーン</option>
+        <option value="Rook">ルーク</option>
+        <option value="Bishop">ビショップ</option>
+        <option value="Knight">ナイト</option>
+        </select>
+    <script>
+        var ctx = document.getElementById("canv").getContext('2d');
+        initGame(ctx);
+    </script>
 </BODY>
 
 </HTML>

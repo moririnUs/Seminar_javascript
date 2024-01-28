@@ -9,7 +9,7 @@ class Pawn {
    */
 
     //turnが-1のときは porn,keima,kyousya,hu,kinの判定を反転
-    move_able(turn, map, x, y) {
+    static move_able(turn, map, x, y) {
 
         let pawn = map[y][x];
 
