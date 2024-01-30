@@ -174,7 +174,7 @@ class Pawn {
                         }
                     }
                 } else {
-                    for (let j = y + 1; j < cell_num; j--) {
+                    for (let j = y; j < cell_num; j++) {
                         if (can_Move(x, j)) {
                             if (isStop(x, j))
                                 break;

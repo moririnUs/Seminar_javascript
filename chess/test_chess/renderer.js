@@ -15,6 +15,32 @@ class Renderer {
         h: 500
     };
 
+    shogi_pawns = [
+        "s_King",
+        "Hu",
+        "Kin",
+        "Gin",
+        "Hisya",
+        "Kaku",
+        "Keima",
+        "Kyousya",
+        "To",
+        "Narikyou",
+        "Narigin",
+        "Ryuuou",
+        "Ryuuma",
+        "Narikei"
+    ];
+
+    chess_pawns = [
+        "c_King",
+        "Pawn",
+        "Bishop",
+        "Rook",
+        "Knight",
+        "Queen"
+    ];
+
 
 
     CELL_SIZE = parseInt(this.RECT_CANV.w / this.COL);
@@ -99,8 +125,6 @@ class Renderer {
         let ctx = this.canv_cache.canv_pieaces.getContext('2d');
         ctx.clearRect(0, 0, this.RECT_CANV.w, this.RECT_CANV.h);
 
-        console.log(state.map)
-
         for (let x = 0; x < this.COL; x++) {
             for (let y = 0; y < this.COL; y++) {
                 if (state.map[y][x] != 0) {
@@ -112,10 +136,15 @@ class Renderer {
 
     drawPiece(ctx, x, y, number, team) {
         let index = 10;
-        if(team == -1 ){
+        if(team == -1 && this.shogi_pawns.includes(number)){
         ctx.setTransform(-1,0,0,-1,2*x+this.CELL_SIZE,2*y+this.CELL_SIZE);
         }
+        if(team == 1 && this.chess_pawns.includes(number)){
+        ctx.drawImage(this.imageManager.imgs["w_"+number], index / 2 + x, index / 2 + y, this.CELL_SIZE - index, this.CELL_SIZE - index);
+
+        }else{
         ctx.drawImage(this.imageManager.imgs[number], index / 2 + x, index / 2 + y, this.CELL_SIZE - index, this.CELL_SIZE - index);
+        }
         ctx.setTransform(1,0,0,1,0,0);
         // let grad = ctx.createLinearGradient(x, y, x + this.CELL_SIZE, y + this.CELL_SIZE);
         // let font_color;
@@ -216,6 +245,12 @@ class Renderer {
             "Narikei": "../assets/narikei.png",
             "Ryuuou": "../assets/ryuuou.png",
             "Ryuuma": "../assets/ryuuma.png",
+            "w_c_King":"../assets/w_c_king.png",
+            "w_Pawn":"../assets/w_pawn.png",
+            "w_Bishop":"../assets/w_bishop.png",
+            "w_Rook":"../assets/w_rook.png",
+            "w_Knight":"../assets/w_knight.png",
+            "w_Queen":"../assets/w_queen.png"
         };
         this.imgLoadPromise = this.imageManager.load();
     }

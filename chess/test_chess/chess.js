@@ -177,7 +177,7 @@ class Game {
           this.renderer.render(this.ctx, this.state, this.point);                                                     //描画リセット
         }
       }
-      w = this.judge_turn();
+      w = await this.judge_turn();
       this.state.revision += 1; 
       this.renderer.render(this.ctx, this.state, this.point);
     }
@@ -186,6 +186,7 @@ class Game {
     } else {
       window.confirm("黒の勝利!");
     }
+    window.location.reload();
   }
 
   getMousePosition(e) {
@@ -341,7 +342,7 @@ class Game {
          * 現在実装している機能:勝敗判定　成りの判定 ターン切り替え
          * @returns 勝者のチーム番号 続行の場合は0
          */
-  judge_turn() {
+  async judge_turn() {
     let king_num = 0;
     let cnt = false;
     let winner = 0;
@@ -388,16 +389,20 @@ class Game {
         if (this.state.map[0][i] == "Pawn" && this.state.team_map[0][i] == 1) {
           optionElem.style.display = "initial";//表示
           change_select = document.getElementById('change_pawn');
+          await new Promise(resolve => document.body.addEventListener("change", resolve, { once: true }));  
           this.state.map[0][i] = change_select.value;
         }
       } else {
         if (this.state.map[this.cell_num - 1][i] == "Pawn" && this.state.team_map[this.cell_num -1 ][i] == -1) {
           optionElem.style.display = "initial";//表示
           change_select = document.getElementById('change_pawn');
+          await new Promise(resolve => document.body.addEventListener("change", resolve, { once: true }));  
           this.state.map[this.cell_num - 1][i] == change_select.value;
         }
       }
     }
+    optionElem.options[0].selected = true;
+    optionElem.style.display = "none";
     this.state.turn *= -1;
 
     if (!cnt) {
