@@ -132,7 +132,7 @@ class Game {
   ev_mouseMove(e) {
     this.getMousePosition(e);
     this.state.selected = this.hitTest(this.point.x, this.point.y);
-    this.renderer.render(this.ctx, this.state, this.point);
+    // this.renderer.render(this.ctx, this.state, this.point);
   }
 
   async ev_mouseClick(e) {
@@ -146,7 +146,7 @@ class Game {
       sel_y = parseInt(sel_y / this.CELL_SIZE);
       console.log(sel_x)
       if (this.map[sel_y][sel_x] != 0 && this.team_map[sel_y][sel_x] == this.init_state.turn) {
-        console.log(this.team_map);
+
         this.able_map = this.pawn.move_able(this.init_state.turn, this.map, this.team_map, sel_x, sel_y);
         console.log(this.able_map);
         this.renderer.draw_able(this.able_map);
@@ -156,7 +156,6 @@ class Game {
         let y = ev.pageY;
         x = parseInt(x / this.CELL_SIZE);
         y = parseInt(y / this.CELL_SIZE);
-        console.log(this.team_map);
         if (this.able_map[y][x] == 1 && x < this.cell_num && y < this.cell_num) {              //盤内の移動可能な場所を指定した場合
           this.map[y][x] = this.map[sel_y][sel_x]
           this.map[sel_y][sel_x] = 0;
@@ -173,7 +172,7 @@ class Game {
       } else if (e.originalEvent.touches) {
         e = e.originalEvent.touches[0];
       } else {
-        e = event.touches[0];
+        e = e.touches[0];
       }
     }
     var rect = e.target.getBoundingClientRect();

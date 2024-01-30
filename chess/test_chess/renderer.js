@@ -99,18 +99,16 @@ class Renderer {
         for (let x = 0; x < this.COL; x++) {
             for (let y = 0; y < this.COL; y++) {
                 if (state.map[y][x] != 0) {
-                    this.drawPiece(ctx, x * this.CELL_SIZE, y * this.CELL_SIZE, state.map[y][x],state.team_map[y][x]);
+                    this.drawPiece(ctx, x * this.CELL_SIZE, y * this.CELL_SIZE, state.map[y][x], state.team_map[y][x]);
                 }
             }
         }
     }
 
-    drawPiece(ctx, x, y, number,team) {
+    drawPiece(ctx, x, y, number, team) {
         let index = 10;
-        // if(team == -1){
-        //     ctx.rotate(Math.PI);
-        // }
-        ctx.drawImage(this.imageManager.imgs[number],index/2 + x,index/2 + y, this.CELL_SIZE - index, this.CELL_SIZE - index);
+
+        ctx.drawImage(this.imageManager.imgs[number], index / 2 + x, index / 2 + y, this.CELL_SIZE - index, this.CELL_SIZE - index);
         // let grad = ctx.createLinearGradient(x, y, x + this.CELL_SIZE, y + this.CELL_SIZE);
         // let font_color;
         // let fill_color;
@@ -179,10 +177,12 @@ class Renderer {
         for (let i = 0; i < this.COL; i++) {
             for (let j = 0; j < this.COL; j++) {
                 if (able_map[i][j]) {
-                    ctx.fillStyle = "gray";
-                    console.log(this.CELL_SIZE)
-                    ctx.arc(j * this.CELL_SIZE + this.CELL_SIZE / 2, i * this.CELL_SIZE + this.CELL_SIZE / 2, this.CELL_SIZE/2 -10,0, 2 * Math.PI);  //移動可能範囲には円を描画
+                    ctx.fillStyle = '#a9a9a9';
+                    ctx.beginPath();
+                    ctx.arc(j * this.CELL_SIZE + this.CELL_SIZE / 2, i * this.CELL_SIZE + this.CELL_SIZE / 2, this.CELL_SIZE / 2, 0, 2 * Math.PI);  //移動可能範囲には円を描画
+                    ctx.closePath();
                     ctx.fill();
+                    console.log(j * this.CELL_SIZE + this.CELL_SIZE / 2,i * this.CELL_SIZE + this.CELL_SIZE / 2);
                 }
             }
         }
