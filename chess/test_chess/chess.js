@@ -56,6 +56,7 @@ class Game {
     "Kin",
     "Kin"
   ];
+
   ex_shogi_pawns = {
     "Hu": "To",
     "Hisya": "Ryuuou",
@@ -66,6 +67,7 @@ class Game {
   };
   init_state = {//ゲーム開始時の盤面の状態
     map: this.map,
+    team_map:this.team_map,
     //ターン。1は先手、-1は後手。
     turn: 1,
     //これが増えてたら画面を描画し直す。
@@ -96,6 +98,7 @@ class Game {
   //聞きたいこと:initGameでどのような処理を行うべきか,描画の仕方とは
   initGame(_ctx) {
     this.random_set();
+    console.log(this.map);
     this.ctx = _ctx;
     this.state = this.objCopy(this.init_state)
     this.setEvents();
@@ -143,7 +146,9 @@ class Game {
       sel_y = parseInt(sel_y / this.CELL_SIZE);
       console.log(sel_x)
       if (this.map[sel_y][sel_x] != 0 && this.team_map[sel_y][sel_x] == this.init_state.turn) {
-        this.able_map = this.pawn.move_able(this.init_state.turn, this.map, sel_x, sel_y);
+        console.log(this.team_map);
+        this.able_map = this.pawn.move_able(this.init_state.turn, this.map, this.team_map, sel_x, sel_y);
+        console.log(this.able_map);
         this.renderer.draw_able(this.able_map);
 
         ev = await new Promise(resolve => document.body.addEventListener("click", resolve, { once: true }));      //移動箇所の選択
@@ -151,6 +156,7 @@ class Game {
         let y = ev.pageY;
         x = parseInt(x / this.CELL_SIZE);
         y = parseInt(y / this.CELL_SIZE);
+        console.log(this.team_map);
         if (this.able_map[y][x] == 1 && x < this.cell_num && y < this.cell_num) {              //盤内の移動可能な場所を指定した場合
           this.map[y][x] = this.map[sel_y][sel_x]
           this.map[sel_y][sel_x] = 0;
@@ -226,7 +232,7 @@ class Game {
 
     i = 0;
 
-    let king = Math.random() * 3;
+    let king = Math.floor(Math.random() * 3);
     //配置する18個の駒を決める。
     if (king == 0 || king == 2)//Math.random()の出力結果が0ならばキング、1ならば王将、2は両方
     {
@@ -237,14 +243,17 @@ class Game {
       pawns1[i] = shogi_pawns1[0];
       i++;
     }
+    chess_pawns1.splice(0, 1);
+    shogi_pawns1.splice(0, 1);
+
     let pawn_max = this.pawns_num - i; //Kingの駒追加分引く
     while (pawn_max != 0) {
       if (Math.floor(Math.random() * 2)) {    //0のとき将棋、1のときチェスの駒を選定
-        c_num = Math.floor(Math.random() * chess_pawns1.length - 1) + 1;//Kingの分配列の長さから引き、最低値を1足す
+        c_num = Math.floor(Math.random() * chess_pawns1.length);//Kingの分配列の長さから引き、最低値を1足す
         pawns1[i] = chess_pawns1[c_num];
         chess_pawns1.splice(c_num, 1);
       } else {
-        s_num = Math.floor(Math.random() * shogi_pawns1.length - 1) + 1;
+        s_num = Math.floor(Math.random() * shogi_pawns1.length);
         pawns1[i] = shogi_pawns1[s_num];
         shogi_pawns1.splice(s_num, 1);
       }
@@ -264,8 +273,7 @@ class Game {
     let pawns2 = this.random_pawn();
     console.log(pawns1);
     console.log(pawns2);
-    console.log(pawns1.length);
-    console.log(this.cell_num * 3);
+
     while (pawns1.length != this.cell_num * 3) {  //自陣(3列分)までの要素として配置なしのステータスを挿入
       pawns1[pawns1.length] = 0;
     }
@@ -277,16 +285,18 @@ class Game {
     let random_num = 0; //ランダムなindexを格納する
     for (y = this.cell_num - 3; y < this.cell_num; y++) {                  //配置の決定(先手)
       for (x = 0; x < this.cell_num; x++) {
-        random_num = Math.random() * pawns1.length;      //指定する要素の位置
+        random_num = Math.floor(Math.random() * pawns1.length);      //指定する要素の位置
         this.map[y][x] = pawns1[random_num];
         this.make_group(this.map, 1, x, y);
         pawns1.splice(random_num, 1);
       }
     }
+    console.log(this.team_map);
+    console.log(this.map);
 
     for (y = 0; y < 3; y++) {
       for (x = 0; x < this.cell_num; x++) {                          //配置の決定(後手)
-        random_num = Math.random() * pawns2.length;
+        random_num = Math.floor(Math.random() * pawns2.length);
         this.map[y][x] = pawns2[random_num];
         this.make_group(this.map, -1, x, y);
         pawns2.splice(random_num, 1);
@@ -313,16 +323,16 @@ class Game {
          * @returns 勝者のチーム番号 続行の場合は0
          */
   judge_turn() {
-    king_num = 0;
-    cnt = false;
-    winner = 0;
-    for (i = 0; i < cell_num; i++) {        //最初に読み取ったキングのチームに対し、別チームのキングがいなかった場合試合終了
-      for (j = 0; j < cell_num; j++) {
+    let king_num = 0;
+    let cnt = false;
+    let winner = 0;
+    for (let i = 0; i < this.cell_num; i++) {        //最初に読み取ったキングのチームに対し、別チームのキングがいなかった場合試合終了
+      for (let j = 0; j < this.cell_num; j++) {
         if (map[i][j].includes("King")) {
           if (king_num != 0) {
-            king_num = team_map[i][j];
+            king_num = this.team_map[i][j];
           } else {
-            if (king_num != team_map[i][j]) {
+            if (king_num != this.team_map[i][j]) {
               cnt = true;
               break;
             }
@@ -332,30 +342,38 @@ class Game {
     }
 
     if (init_state.turn == 1) {                         //将棋の駒に対して成りを適用する
-      if (shogi_pawns.includes(map[y][x]) && y < 3) {
-        if (window.confirm("成りますか?"))               //アラートによって選択させる
-          map[y][x] = ex_shogi_pawns[map[y][x]];
+      for (let y = 0; y < 3; y++) {
+        for (let x = 0; x < this.cell_num; x++) {
+          if (this.shogi_pawns.includes(map[y][x])) {
+            if (window.confirm("成りますか?"))               //アラートによって選択させる
+              map[y][x] = ex_shogi_pawns[map[y][x]];
+          }
+        }
       }
     } else {
-      if (shogi_pawns.includes(map[y][x]) && y >= cell_num - 3) {
-        if (window.confirm("成りますか?"))
-          map[y][x] = ex_shogi_pawns[map[y][x]];
+      for (let y = this.cell_num - 1; y > this.cell_num - 3; y--) {
+        for (let x = 0; x < this.cell_num; x++) {
+          if (this.shogi_pawns.includes(map[y][x])) {
+            if (window.confirm("成りますか?"))
+              map[y][x] = ex_shogi_pawns[map[y][x]];
+          }
+        }
       }
     };
 
     //ポーンの変化処理
-    optionElem = document.getElementById('change_pawn');
+    let optionElem = document.getElementById('change_pawn');
     optionElem.style.display = "none";//非表示
 
-    for (i = 0; i < cell_num; i++) {
-      if (init_state.turn == 1) {
-        if (map[0][i] == "Pawn") {
+    for (let i = 0; i < cell_num; i++) {
+      if (this.init_state.turn == 1) {
+        if (this.map[0][i] == "Pawn") {
           optionElem.style.display = "initial";//表示
-          change_select = document.getElementById('change_pawn');
-          map[0][i] = change_select.value;
+          let change_select = document.getElementById('change_pawn');
+          this.map[0][i] = change_select.value;
         }
       } else {
-        if (map[cell_num - 1][i] == "Pawn") {
+        if (this.map[this.cell_num - 1][i] == "Pawn") {
           optionElem.style.display = "initial";//表示
           change_select = document.getElementById('change_pawn');
           map[cell_num - 1][i] == change_select.value;
