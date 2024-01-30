@@ -1,4 +1,5 @@
 class Renderer {
+
     img;
     COL = 9;
     RECT_CANV = {
@@ -13,6 +14,8 @@ class Renderer {
         w: 500,
         h: 500
     };
+
+
 
     CELL_SIZE = parseInt(this.RECT_CANV.w / this.COL);
     COLOR_LINE = "#000000";
@@ -96,6 +99,8 @@ class Renderer {
         let ctx = this.canv_cache.canv_pieaces.getContext('2d');
         ctx.clearRect(0, 0, this.RECT_CANV.w, this.RECT_CANV.h);
 
+        console.log(state.map)
+
         for (let x = 0; x < this.COL; x++) {
             for (let y = 0; y < this.COL; y++) {
                 if (state.map[y][x] != 0) {
@@ -107,8 +112,11 @@ class Renderer {
 
     drawPiece(ctx, x, y, number, team) {
         let index = 10;
-
+        if(team == -1 ){
+        ctx.setTransform(-1,0,0,-1,500, 3 * this.CELL_SIZE);
+        }
         ctx.drawImage(this.imageManager.imgs[number], index / 2 + x, index / 2 + y, this.CELL_SIZE - index, this.CELL_SIZE - index);
+        ctx.setTransform(1,0,0,1,0,0);
         // let grad = ctx.createLinearGradient(x, y, x + this.CELL_SIZE, y + this.CELL_SIZE);
         // let font_color;
         // let fill_color;
