@@ -140,12 +140,14 @@ class Game {
     let target_pawn;
     let ev;
     let x = 0, y = 0;
+    let sel_x = 0;
+    let sel_y = 0;
     let w = 0;
-    while (w != 0) {
+    while (w == 0) {
       while (ct) {
         ev = await new Promise(resolve => document.body.addEventListener("click", resolve, { once: true }));          //駒の選択
-        let sel_x = ev.pageX;
-        let sel_y = ev.pageY;
+         sel_x = ev.pageX;
+         sel_y = ev.pageY;
         sel_x = parseInt(sel_x / this.CELL_SIZE);
         sel_y = parseInt(sel_y / this.CELL_SIZE);
 
@@ -153,17 +155,16 @@ class Game {
           this.map[sel_y][sel_x] = target_pawn;
           this.team_map[sel_y][sel_x] = this.state.turn;
           this.map[y][x] = 0;
+          this.team_map[y][x] = 0;
           console.log(this.map);
           ct = false;
-          for(let j = 0;j<this.cell_num;j++){
 
+          for(let j = 0;j<this.cell_num;j++){
             for(let i = 0;i<this.cell_num;i++){                                                                     //able_mapの初期化
               this.able_map[j][i] = 0;
             }
           }
-        }
-
-        if (this.team_map[sel_y][sel_x] == this.state.turn) {                   //自チームの駒を選択したとき
+        }else if (this.team_map[sel_y][sel_x] == this.state.turn) {                   //自チームの駒を選択したとき
           this.renderer.render(this.ctx, this.state, this.point);
           this.able_map = this.pawn.move_able(this.state.turn, this.map, this.team_map, sel_x, sel_y);
           target_pawn = this.map[sel_y][sel_x];
@@ -171,7 +172,7 @@ class Game {
           y = sel_y;
           this.renderer.draw_able(this.able_map, this.ctx);
         }
-        else {
+        else{
           this.renderer.render(this.ctx, this.state, this.point);                                                     //描画リセット
         }
       }
@@ -348,7 +349,7 @@ class Game {
     for (let i = 0; i < this.cell_num; i++) {        //最初に読み取ったキングのチームに対し、別チームのキングがいなかった場合試合終了
       for (let j = 0; j < this.cell_num; j++) {
         if (this.map[i][j] == "c_King" || this.map[i][j] == "s_King") {
-          if (king_num != 0) {
+          if (king_num == 0) {
             king_num = this.team_map[i][j];
           } else {
             if (king_num != this.team_map[i][j]) {
@@ -379,7 +380,7 @@ class Game {
         }
       }
     };
-
+    let change_select;
     //ポーンの変化処理
     let optionElem = document.getElementById('change_pawn');
     optionElem.style.display = "none";//非表示
@@ -388,14 +389,14 @@ class Game {
       if (this.state.turn == 1) {
         if (this.map[0][i] == "Pawn") {
           optionElem.style.display = "initial";//表示
-          let change_select = document.getElementById('change_pawn');
+          change_select = document.getElementById('change_pawn');
           this.map[0][i] = change_select.value;
         }
       } else {
         if (this.map[this.cell_num - 1][i] == "Pawn") {
           optionElem.style.display = "initial";//表示
           change_select = document.getElementById('change_pawn');
-          this.map[cell_num - 1][i] == change_select.value;
+          this.map[this.cell_num - 1][i] == change_select.value;
         }
       }
     }
