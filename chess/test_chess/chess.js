@@ -106,27 +106,6 @@ class Game {
     this.renderer.imgLoadPromise.then(function () {
       this.renderer.render(this.ctx, this.state);
     }.bind(this));
-    // ctx = _ctx;
-    // state = objCopy(init_state);
-    // if (!evented) {     //イベントを登録していないとき
-    //   evented = true;
-    //   setEvents();    //イベント呼び出し
-    // }
-
-    // map = random_set();
-    // Renderer.render(ctx, state, point);
-    // while (1) {
-    //   ev_mouseClick();
-    //   w = judge_turn();
-    //   if (!w) {
-    //     if (w == 1) {
-    //       window.confirm("白の勝利!");
-    //     } else {
-    //       window.confirm("黒の勝利!");
-    //     }
-    //     break;
-    //   }
-    // }
   }
 
   ev_mouseMove(e) {

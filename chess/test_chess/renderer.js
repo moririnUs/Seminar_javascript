@@ -146,44 +146,6 @@ class Renderer {
         ctx.drawImage(this.imageManager.imgs[number], index / 2 + x, index / 2 + y, this.CELL_SIZE - index, this.CELL_SIZE - index);
         }
         ctx.setTransform(1,0,0,1,0,0);
-        // let grad = ctx.createLinearGradient(x, y, x + this.CELL_SIZE, y + this.CELL_SIZE);
-        // let font_color;
-        // let fill_color;
-        // if (number > 0) {
-        //     font_color = this.COLOR_BLACK;
-        //     fill_color = this.COLOR_WHITE;
-        //     grad.addColorStop(0, 'rgb(180, 180, 180)');
-        //     grad.addColorStop(0.4, fill_color);
-        //     grad.addColorStop(1, fill_color);
-        // } else if (number < 0) {
-        //     font_color = this.COLOR_WHITE;
-        //     fill_color = this.COLOR_BLACK;
-        //     grad.addColorStop(0, fill_color);
-        //     grad.addColorStop(0.4, 'rgb(70, 70, 70)');
-        //     grad.addColorStop(1, 'rgb(70, 70, 70)');
-        // }
-
-
-        // ctx.shadowBlur = 20;
-        // ctx.shadowColor = "rgba(0, 0, 0, 1)";
-        // ctx.shadowOffsetX = 5;
-        // ctx.shadowOffsetY = 5;
-
-        // ctx.fillStyle = grad;
-        // ctx.beginPath();
-        // ctx.fillRect(
-        //     x + this.CELL_SIZE / 10,
-        //     y + this.CELL_SIZE / 10,
-        //     this.CELL_SIZE - 1 * this.CELL_SIZE / 5,
-        //     this.CELL_SIZE - 1 * this.CELL_SIZE / 5
-        // );
-
-        // ctx.shadowColor = "rgba(0, 0, 0, 0)";;
-        // ctx.shadowBlur = 0;
-        // ctx.shadowOffsetX = 0;
-        // ctx.shadowOffsetY = 0;
-
-        // return ctx;
     }
 
     drawEffect(state) {
