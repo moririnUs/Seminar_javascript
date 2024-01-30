@@ -42,11 +42,12 @@ class Pawn {
         switch (pawn) {
             case "c_King":
             case "s_King":
-                for (i = y - 1; i < y + 1; y++) {
-                    for (j = x - 1; j < x + 1; x++) {
-                        can_Move(i, j);
+                for (i = y - 1; i <= y + 1; i++) {
+                    for (j = x - 1; j <= x + 1; j++) {
+                        can_Move(j, i);
                     }
                 }
+                break;
 
             case "Knight":
 
@@ -84,38 +85,46 @@ class Pawn {
             case "Kaku":
                 i = x; j = y;
                 while (i < cell_num && j < cell_num) {    // 右斜め下
-                    if (can_Move(i, j));
+                    if (can_Move(i, j)){
                     if (isStop(i, j)) {     //敵の駒の位置で終了
                         break;
                     }
-                    i++; j++;
+                    i++; j++;}else{
+                        break;
+                    }
                 }
 
                 i = x; j = y;
                 while (i >= 0 && j < cell_num) {          //左斜め下
-                    if (can_Move(i, j));
+                    if (can_Move(i, j)){
                     if (isStop(i, j))      //敵の駒の位置で終了
                         break;
                     i--; j++;
-                }
+                }else{
+                     break;
+                }}
 
                 i = x; j = y;
                 while (i >= 0 && j >= 0) {                  //左斜め上
                     if (can_Move(i, j)) {
                         if (isStop(i, j))
                             break;
-                    }
+                    
                     i--; j--;
-                }
+                    }else{
+                        break;
+                    }}
 
                 i = x; j = y;
                 while (i < cell_num && j >= 0) {                  //右斜め上
                     if (can_Move(i, j)) {
                         if (isStop(i, j))
                             break;
-                    }
+                    
                     i++; j--;
-                }
+                    }else{
+                        break;
+                    }}
                 break;
 
             case "Rook":
@@ -124,41 +133,53 @@ class Pawn {
                     if (can_Move(i, y)) {
                         if (isStop(i, y))
                             break;
+                    }else{
+                        break;
                     }
                 }
                 for (let i = x; i >= 0; i--) {                          //左
                     if (can_Move(i, y)) {
                         if (isStop(i, y))
                             break;
+                    }else{
+                        break;
                     }
                 }
                 for (let j = y; j < cell_num; j++) {                    //下
                     if (can_Move(x, j)) {
                         if (isStop(x, j))
                             break;
+                    }else{
+                        break;
                     }
                 }
                 for (let j = y; j >= 0; j--) {                          //上
                     if (can_Move(x, j)) {
                         if (isStop(x, j))
                             break;
+                    }else{
+                        break;
                     }
                 }
                 break;
 
             case "Kyousya":
                 if (turn == 1) {
-                    for (j = y; j >= 0; j--) {
-                        if (can_Move(i, y)) {
-                            if (isStop(i, y))
-                                break;
-                        }
-                    }
-                } else {
-                    for (j = y + 1; j < cell_num; j--) {
+                    for (let j = y; j >= 0; j--) {
                         if (can_Move(x, j)) {
                             if (isStop(x, j))
                                 break;
+                        }else{
+                            break;
+                        }
+                    }
+                } else {
+                    for (let j = y + 1; j < cell_num; j--) {
+                        if (can_Move(x, j)) {
+                            if (isStop(x, j))
+                                break;
+                        }else{
+                            break;
                         }
                     }
                 }
@@ -175,61 +196,77 @@ class Pawn {
                     if (can_Move(i, y)) {
                         if (isStop(i, y))
                             break;
+                    }else{
+                        break;
                     }
                 }
                 for (let i = x; i >= 0; i--) {                          //左
                     if (can_Move(i, y)) {
                         if (isStop(i, y))
                             break;
+                    }else{
+                        break;
                     }
                 }
                 for (let j = y; j < cell_num; j++) {                    //下
                     if (can_Move(x, j)) {
                         if (isStop(x, j))
                             break;
+                    }else{
+                        break;
                     }
                 }
                 for (let j = y; j >= 0; j--) {                          //上
                     if (can_Move(x, j)) {
                         if (isStop(x, j))
                             break;
+                    }else{
+                        break;
                     }
                 }
 
                 i = x; j = y;
                 while (i < cell_num && j < cell_num) {    // 右斜め下
-                    if (can_Move(i, j));
+                    if (can_Move(i, j)){
                     if (isStop(i, j)) {     //敵の駒の位置で終了
                         break;
                     }
-                    i++; j++;
+                    i++; j++;}else{
+                        break;
+                    }
                 }
 
                 i = x; j = y;
                 while (i >= 0 && j < cell_num) {          //左斜め下
-                    if (can_Move(i, j));
+                    if (can_Move(i, j)){
                     if (isStop(i, j))      //敵の駒の位置で終了
                         break;
                     i--; j++;
-                }
+                }else{
+                     break;
+                }}
 
                 i = x; j = y;
                 while (i >= 0 && j >= 0) {                  //左斜め上
                     if (can_Move(i, j)) {
                         if (isStop(i, j))
                             break;
-                    }
+                    
                     i--; j--;
-                }
+                    }else{
+                        break;
+                    }}
 
                 i = x; j = y;
                 while (i < cell_num && j >= 0) {                  //右斜め上
                     if (can_Move(i, j)) {
                         if (isStop(i, j))
                             break;
-                    }
+                    
                     i++; j--;
-                }
+                    }else{
+                        break;
+                    }}
                 break;
 
             case "Gin":

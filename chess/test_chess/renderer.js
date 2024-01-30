@@ -171,18 +171,15 @@ class Renderer {
      * 駒の移動可能な範囲を描画する。
      * @param {Object} able_map 駒の移動可能範囲 
      */
-    draw_able(able_map) {
-        let canv = document.createElement("canvas");
-        let ctx = canv.getContext('2d');
+    draw_able(able_map,ctx) {
         for (let i = 0; i < this.COL; i++) {
             for (let j = 0; j < this.COL; j++) {
                 if (able_map[i][j]) {
-                    ctx.fillStyle = '#a9a9a9';
+                    ctx.fillStyle = '#a9a9a97f';
                     ctx.beginPath();
-                    ctx.arc(j * this.CELL_SIZE + this.CELL_SIZE / 2, i * this.CELL_SIZE + this.CELL_SIZE / 2, this.CELL_SIZE / 2, 0, 2 * Math.PI);  //移動可能範囲には円を描画
+                    ctx.arc(j * this.CELL_SIZE + this.CELL_SIZE / 2, i * this.CELL_SIZE + this.CELL_SIZE / 2, this.CELL_SIZE / 2-10, 0, 2 * Math.PI);  //移動可能範囲には円を描画
                     ctx.closePath();
                     ctx.fill();
-                    console.log(j * this.CELL_SIZE + this.CELL_SIZE / 2,i * this.CELL_SIZE + this.CELL_SIZE / 2);
                 }
             }
         }
