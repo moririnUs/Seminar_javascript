@@ -113,7 +113,7 @@ class Renderer {
     drawPiece(ctx, x, y, number, team) {
         let index = 10;
         if(team == -1 ){
-        ctx.setTransform(-1,0,0,-1,500, 3 * this.CELL_SIZE);
+        ctx.setTransform(-1,0,0,-1,2*x+this.CELL_SIZE,2*y+this.CELL_SIZE);
         }
         ctx.drawImage(this.imageManager.imgs[number], index / 2 + x, index / 2 + y, this.CELL_SIZE - index, this.CELL_SIZE - index);
         ctx.setTransform(1,0,0,1,0,0);
