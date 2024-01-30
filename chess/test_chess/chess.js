@@ -141,43 +141,48 @@ class Game {
     let ev;
     let x = 0, y = 0;
     let w = 0;
-    while(w != 0)
-    {while (ct) {
-      ev = await new Promise(resolve => document.body.addEventListener("click", resolve, { once: true }));          //駒の選択
-      let sel_x = ev.pageX;
-      let sel_y = ev.pageY;
-      sel_x = parseInt(sel_x / this.CELL_SIZE);
-      sel_y = parseInt(sel_y / this.CELL_SIZE);
+    while (w != 0) {
+      while (ct) {
+        ev = await new Promise(resolve => document.body.addEventListener("click", resolve, { once: true }));          //駒の選択
+        let sel_x = ev.pageX;
+        let sel_y = ev.pageY;
+        sel_x = parseInt(sel_x / this.CELL_SIZE);
+        sel_y = parseInt(sel_y / this.CELL_SIZE);
 
-      if (this.able_map[sel_y][sel_x] == 1) {                                                                       //移動先の確定             
-        this.map[sel_y][sel_x] = target_pawn;
-        this.team_map[sel_y][sel_x] = this.state.turn;
-        this.map[y][x] = 0;
-        console.log(this.map);
-        ct = false;
-      }
+        if (this.able_map[sel_y][sel_x] == 1) {                                                                       //移動先の確定             
+          this.map[sel_y][sel_x] = target_pawn;
+          this.team_map[sel_y][sel_x] = this.state.turn;
+          this.map[y][x] = 0;
+          console.log(this.map);
+          ct = false;
+          for(let j = 0;j<this.cell_num;j++){
 
-      if (this.team_map[sel_y][sel_x] == this.init_state.turn) {                   //自チームの駒を選択したとき
-        this.renderer.render(this.ctx, this.state, this.point);
-        this.able_map = this.pawn.move_able(this.init_state.turn, this.map, this.team_map, sel_x, sel_y);
-        console.log(this.able_map);
-        target_pawn = this.map[sel_y][sel_x];
-        x = sel_x;
-        y = sel_y;
-        this.renderer.draw_able(this.able_map, this.ctx);
-      }
-      else {
-        this.renderer.render(this.ctx, this.state, this.point);                                                     //描画リセット
-      }
-    }
-    w = this.judge_turn();
-    this.renderer.render(this.ctx, this.state, this.point); 
-  }
-  if (w == 1) {
-          window.confirm("白の勝利!");
-        } else {
-          window.confirm("黒の勝利!");
+            for(let i = 0;i<this.cell_num;i++){                                                                     //able_mapの初期化
+              this.able_map[j][i] = 0;
+            }
+          }
         }
+
+        if (this.team_map[sel_y][sel_x] == this.state.turn) {                   //自チームの駒を選択したとき
+          this.renderer.render(this.ctx, this.state, this.point);
+          this.able_map = this.pawn.move_able(this.state.turn, this.map, this.team_map, sel_x, sel_y);
+          target_pawn = this.map[sel_y][sel_x];
+          x = sel_x;
+          y = sel_y;
+          this.renderer.draw_able(this.able_map, this.ctx);
+        }
+        else {
+          this.renderer.render(this.ctx, this.state, this.point);                                                     //描画リセット
+        }
+      }
+      w = this.judge_turn();
+      this.renderer.render(this.ctx, this.state, this.point);
+    }
+    if (w == 1) {
+      window.confirm("白の勝利!");
+    } else {
+      window.confirm("黒の勝利!");
+    }
   }
 
   getMousePosition(e) {
@@ -342,7 +347,7 @@ class Game {
     let winner = 0;
     for (let i = 0; i < this.cell_num; i++) {        //最初に読み取ったキングのチームに対し、別チームのキングがいなかった場合試合終了
       for (let j = 0; j < this.cell_num; j++) {
-        if (this.map[i][j]== "c_King" || this.map[i][j] == "s_King") {
+        if (this.map[i][j] == "c_King" || this.map[i][j] == "s_King") {
           if (king_num != 0) {
             king_num = this.team_map[i][j];
           } else {
@@ -394,7 +399,7 @@ class Game {
         }
       }
     }
-    this.renderer.render(this.ctx,this.state,this.point);
+    this.renderer.render(this.ctx, this.state, this.point);
     this.state.turn *= -1;
 
     if (!cnt) {
