@@ -194,7 +194,7 @@ class Renderer {
             "Queen": "./assets/queen.png",
             "Knight": "./assets/knight.png",
             "s_King": "./assets/s_king.png",
-            "Hu": "./assets/Hu.png",
+            "Hu": "./assets/hu.png",
             "Kyousya": "./assets/kyousya.png",
             "Keima": "./assets/keima.png",
             "Gin": "./assets/gin.png",
