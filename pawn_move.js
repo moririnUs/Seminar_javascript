@@ -33,9 +33,10 @@ class Pawn {
         function isStop(x, y) {
             if (team_map[y][x] == -turn || team_map[y][x] == turn) {
                 return true;
-            }else{
-            return false;
-        }}
+            } else {
+                return false;
+            }
+        }
 
         let rev_y = turn;      //チームによってyの変化量を反転する
 
@@ -67,8 +68,10 @@ class Pawn {
                 break;
 
             case "Pawn":
-                can_Move(x, y - rev_y);
-
+                if (can_Move(x, y - rev_y)) {
+                    if (team_map[x][y - rev_y] != 0) {
+                    }
+                }
                 if ((x + 1) < cell_num && (y - rev_y) < cell_num && (y - rev_y) >= 0) {
                     if (team_map[y - rev_y][x + 1] == -turn) {
                         able_map[y - rev_y][x + 1] = 1;
@@ -85,46 +88,50 @@ class Pawn {
             case "Kaku":
                 i = x; j = y;
                 while (i < cell_num && j < cell_num) {    // 右斜め下
-                    if (can_Move(i, j)){
-                    if (isStop(i, j)) {     //敵の駒の位置で終了
-                        break;
-                    }
-                    i++; j++;}else{
+                    if (can_Move(i, j)) {
+                        if (isStop(i, j)) {     //敵の駒の位置で終了
+                            break;
+                        }
+                        i++; j++;
+                    } else {
                         break;
                     }
                 }
 
                 i = x; j = y;
                 while (i >= 0 && j < cell_num) {          //左斜め下
-                    if (can_Move(i, j)){
-                    if (isStop(i, j))      //敵の駒の位置で終了
+                    if (can_Move(i, j)) {
+                        if (isStop(i, j))      //敵の駒の位置で終了
+                            break;
+                        i--; j++;
+                    } else {
                         break;
-                    i--; j++;
-                }else{
-                     break;
-                }}
+                    }
+                }
 
                 i = x; j = y;
                 while (i >= 0 && j >= 0) {                  //左斜め上
                     if (can_Move(i, j)) {
                         if (isStop(i, j))
                             break;
-                    
-                    i--; j--;
-                    }else{
+
+                        i--; j--;
+                    } else {
                         break;
-                    }}
+                    }
+                }
 
                 i = x; j = y;
                 while (i < cell_num && j >= 0) {                  //右斜め上
                     if (can_Move(i, j)) {
                         if (isStop(i, j))
                             break;
-                    
-                    i++; j--;
-                    }else{
+
+                        i++; j--;
+                    } else {
                         break;
-                    }}
+                    }
+                }
                 break;
 
             case "Rook":
@@ -133,7 +140,7 @@ class Pawn {
                     if (can_Move(i, y)) {
                         if (isStop(i, y))
                             break;
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -141,7 +148,7 @@ class Pawn {
                     if (can_Move(i, y)) {
                         if (isStop(i, y))
                             break;
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -149,7 +156,7 @@ class Pawn {
                     if (can_Move(x, j)) {
                         if (isStop(x, j))
                             break;
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -157,7 +164,7 @@ class Pawn {
                     if (can_Move(x, j)) {
                         if (isStop(x, j))
                             break;
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -169,7 +176,7 @@ class Pawn {
                         if (can_Move(x, j)) {
                             if (isStop(x, j))
                                 break;
-                        }else{
+                        } else {
                             break;
                         }
                     }
@@ -178,7 +185,7 @@ class Pawn {
                         if (can_Move(x, j)) {
                             if (isStop(x, j))
                                 break;
-                        }else{
+                        } else {
                             break;
                         }
                     }
@@ -196,7 +203,7 @@ class Pawn {
                     if (can_Move(i, y)) {
                         if (isStop(i, y))
                             break;
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -204,7 +211,7 @@ class Pawn {
                     if (can_Move(i, y)) {
                         if (isStop(i, y))
                             break;
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -212,7 +219,7 @@ class Pawn {
                     if (can_Move(x, j)) {
                         if (isStop(x, j))
                             break;
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -220,53 +227,57 @@ class Pawn {
                     if (can_Move(x, j)) {
                         if (isStop(x, j))
                             break;
-                    }else{
+                    } else {
                         break;
                     }
                 }
 
                 i = x; j = y;
                 while (i < cell_num && j < cell_num) {    // 右斜め下
-                    if (can_Move(i, j)){
-                    if (isStop(i, j)) {     //敵の駒の位置で終了
-                        break;
-                    }
-                    i++; j++;}else{
+                    if (can_Move(i, j)) {
+                        if (isStop(i, j)) {     //敵の駒の位置で終了
+                            break;
+                        }
+                        i++; j++;
+                    } else {
                         break;
                     }
                 }
 
                 i = x; j = y;
                 while (i >= 0 && j < cell_num) {          //左斜め下
-                    if (can_Move(i, j)){
-                    if (isStop(i, j))      //敵の駒の位置で終了
+                    if (can_Move(i, j)) {
+                        if (isStop(i, j))      //敵の駒の位置で終了
+                            break;
+                        i--; j++;
+                    } else {
                         break;
-                    i--; j++;
-                }else{
-                     break;
-                }}
+                    }
+                }
 
                 i = x; j = y;
                 while (i >= 0 && j >= 0) {                  //左斜め上
                     if (can_Move(i, j)) {
                         if (isStop(i, j))
                             break;
-                    
-                    i--; j--;
-                    }else{
+
+                        i--; j--;
+                    } else {
                         break;
-                    }}
+                    }
+                }
 
                 i = x; j = y;
                 while (i < cell_num && j >= 0) {                  //右斜め上
                     if (can_Move(i, j)) {
                         if (isStop(i, j))
                             break;
-                    
-                    i++; j--;
-                    }else{
+
+                        i++; j--;
+                    } else {
                         break;
-                    }}
+                    }
+                }
                 break;
 
             case "Gin":
@@ -317,10 +328,10 @@ class Pawn {
                     }
                 }
 
-                can_Move(x-1,y-1);
-                can_Move(x-1,y+1);
-                can_Move(x+1,y-1);
-                can_Move(x+1,y+1);
+                can_Move(x - 1, y - 1);
+                can_Move(x - 1, y + 1);
+                can_Move(x + 1, y - 1);
+                can_Move(x + 1, y + 1);
                 break;
 
             case "Ryuuma":
@@ -358,10 +369,10 @@ class Pawn {
                     }
                     i++; j--;
                 }
-                can_Move(x,y-1);
-                can_Move(x,y+1);
-                can_Move(x+1,y);
-                can_Move(x-1,y);
+                can_Move(x, y - 1);
+                can_Move(x, y + 1);
+                can_Move(x + 1, y);
+                can_Move(x - 1, y);
                 break;
         }
 
