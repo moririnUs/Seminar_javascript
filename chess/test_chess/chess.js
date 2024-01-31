@@ -350,7 +350,7 @@ class Game {
         }
       }
     } else {
-      for (let y = this.cell_num - 1; y > this.cell_num - 3; y--) {
+      for (let y = this.cell_num - 1; y >= this.cell_num - 3; y--) {
         for (let x = 0; x < this.cell_num; x++) {
           if (this.shogi_pawns.includes(this.state.map[y][x]) && this.state.team_map[y][x] == -1) {
             if (window.confirm("成りますか?"))
