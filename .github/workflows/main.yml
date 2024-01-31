@@ -1,0 +1,9 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - "gh_pages"
+jobs:
+  build:
+    runs-on: ubuntu-18.04
