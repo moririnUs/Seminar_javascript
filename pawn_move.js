@@ -69,8 +69,8 @@ class Pawn {
 
             case "Pawn":
                 if (can_Move(x, y - rev_y)) {
-                    if (team_map[x][y - rev_y] != 0) {
-                        able_map[x][y-rev_y] = 0;           //前に駒がある場合停止
+                    if (team_map[y-rev_y][x] != 0) {
+                        able_map[y-rev_y][x] = 0;           //前に駒がある場合停止
                     }
                 }
                 if ((x + 1) < cell_num && (y - rev_y) < cell_num && (y - rev_y) >= 0) {
